@@ -1,0 +1,80 @@
+{
+  "name": "Prospector",
+  "description": "A File Explorer for Firefox OS",
+  "version": "0.1",
+  "type": "privileged",
+  "launch_path": "/index.html",
+  "developer": {
+    "name": "Codexa",
+    "url": "http://www.codexa.org"
+  },
+  "permissions": {
+    "device-storage:sdcard":{
+      "access": "readwrite"
+    },
+    "device-storage:apps":{
+      "access": "readwrite"
+    },
+    "device-storage:music":{
+      "access": "readwrite"
+    },
+    "device-storage:pictures":{
+      "access": "readwrite"
+    },
+    "device-storage:videos":{
+      "access": "readwrite"
+    }
+  },
+  "locales": {
+    "en-US": {
+      "name": "Propector",
+      "description": "A File Explorer for Firefox OS"
+    },
+    "ar": {
+      "name": "Propector",
+  	  "description": "A مستكشف الملفات لفايرفوكس OS"
+    },
+    "de": {
+  	  "name": "Propector",
+  	  "description": "Ein Datei-Explorer für Firefox OS"
+    },
+    "el": {
+  	  "name": "Propector",
+  	  "description": "Μια File Explorer για τον Firefox OS"
+    },
+    "es": {
+  	  "name": "Propector",
+  	  "description": "Un explorador de archivos para Firefox OS"
+    },
+    "fr": {
+  	  "name": "Propector",
+  	  "description": "Un explorateur de fichiers pour Firefox OS"
+    },
+    "it": {
+  	  "name": "Propector",
+  	  "description": "Un File Explorer per Firefox OS"
+    },
+    "pt-BR": {
+  	  "name": "Propector",
+  	  "description": "A File Explorer para o Firefox OS"
+    },
+    "ru": {
+  	  "name": "Propector",
+  	  "description": "File Explorer для Firefox OS"
+    },
+    "tr": {
+  	  "name": "Propector",
+  	  "description": "Firefox OS için bir Dosya Gezgini"
+    },
+    "zh-TW": {
+  	  "name": "Propector",
+  	  "description": "一个文件浏览器火狐OS"
+    }
+  },
+  "default_locale": "en-US",
+  "icons": {
+    "64": "/img/icons/ic/app_logo64.png",
+    "128": "/img/icons/ic/app_logo128.png",
+    "256": "/img/icons/ic/app_logo256.png"
+  }
+}
