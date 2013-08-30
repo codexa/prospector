@@ -1,0 +1,381 @@
+/*
+* Prospector Styles
+* Copyright (C) Codexa Organization 2013.
+*/
+
+/* Basic CSS */
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;  
+  margin: 0;
+  padding: 0;  
+  font-size: 10px;
+  font-family: "Open Sans", sans-serif;  
+  background: #dfdfdf;
+  color: #6f6f6f;
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  src: local('OpenSans'), url(fonts/OpenSans.woff) format('woff');
+}
+
+section > header:first-child h1.prospector {
+  vertical-align: middle;
+  text-align: center !important;
+}
+
+[role="main"].header-only {
+  height: calc(100% - 5rem);
+    height: -moz-calc(100% - 5rem);
+    height: -webkit-calc(100% - 5rem);
+  overflow: scroll;
+}
+
+.redAlert {
+  color: red;
+  font-size: 2rem;
+  text-align: center;
+  display: block;
+  margin: 1rem;
+}
+
+
+/* action_menu.css */
+form[role=dialog] {
+  visibility: hidden;
+  opacity: .99;  
+  transform: translateY(100%);
+    -moz-transform: translateY(100%);
+    -webkit-transform: translateY(100%);
+    -o-transform: translateY(100%);
+    -ms-transform: translateY(100%);
+  transition: all .4s ease;
+    -moz-transition: all .4s ease;
+    -webkit-transition: all .4s ease;
+    -o-transition: all .4s ease;
+}
+
+form[role=dialog].current {
+  visibility: visible;
+  opacity: 1;  
+  transform: none;
+    -moz-transform: none;
+    -webkit-transform: none;
+    -o-transform: none;
+    -ms-transform: none;
+}
+
+
+/* Lists */
+[data-type="list"], [data-type="edit"] {
+  margin: 0;
+  padding: 0;
+}
+
+[data-type="list"] h2,
+[data-type="edit"] h2 {
+  background: #CACACA;
+  padding: 5px 20px;
+  color: #2C2C2C;
+  margin: 0 0;
+  font-family: "Open Sans";
+  font-weight: normal;
+  font-size: 1.8rem;
+}
+
+[data-type="list"] li a,
+[data-type="edit"] li a,
+.noLink {
+  padding-left: 20px;
+  padding-right: 20px;
+  text-decoration: none;
+}
+
+[data-type="edit"] li {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+
+/* File List */
+[data-type="list"] li.file-list-item {
+  height: auto;
+  background: #eee;
+  border-bottom: 2px solid #aeaeae;
+}
+
+[data-type="list"] li.file-list-item a {
+  padding: 0;
+  margin: 0;
+  height: auto;
+}
+
+[data-type="list"] li.file-list-item > a > p,
+[data-type="list"] li.file-list-item > a > div {
+  padding: .5rem 2rem;
+}
+
+[data-type="list"] li.file-list-item .file-item-info {
+  padding: .6rem 2rem;
+  overflow: hidden;
+}
+
+[data-type="list"] li.file-list-item .file-item-info .file-item-icon {
+  height: 2rem;
+  padding-top: 2.2rem;
+}
+
+[data-type="list"] li.file-list-item .file-item-name {
+  font-size: 1.8rem;
+  color: #2c2c2c;
+  font-weight: bold;
+  margin: 0;
+}
+
+[data-type="list"] li.file-list-item .file-item-path {
+  font-size: 1.2rem;
+  color: #4a4a4a;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  top: -.4rem;
+}
+
+
+/* Buttons */
+.button-block {
+  width: 96%;
+  margin-left: 2%;
+}
+
+
+/* Value selectors */
+#fileTypeLegend {
+  float: right;
+  width: 9rem;
+}
+
+#createDialogFileType {
+  position: absolute;
+  padding-top: 11px;  
+}
+
+#locationLegend {
+  width: 100%;
+}
+
+#createDialogFileLocation {
+  text-align: center;
+}
+  
+legend.action { 
+  background: none;
+  border: none;
+  border-radius: 0;
+  outline: none;
+}
+
+legend.action:active {
+  background-color: #eee;
+  outline: none;
+}
+
+legend.action select {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  outline: none;
+  border: none;
+  border-radius: 0;
+}
+
+aside.pack-end select {
+  background: none;
+  outline: none;
+  border: none;
+  border-radius: 0px;
+  font-size: 1.5rem;
+  position: absolute;
+  right: 0;
+  padding-top: 1.3rem;
+  text-align: right;
+  text-indent: 1.8rem;
+}
+
+aside.pack-end select:after {
+  content: "";
+  position: absolute;
+  top: 1.8rem;
+  width: 0;
+  height: 0;
+  margin-left: 0.5rem;
+  border: 0.4rem solid transparent;
+  border-top-color: #333;
+}
+
+legend.action select.dummy,
+aside select.dummy {
+  visibility: hidden;
+  width: 80%;
+}
+
+
+/* Tab Toolbar */
+.tabToolbar {
+  opacity: 0;
+  visibility: hidden;
+  height: 4rem;
+  transition: opacity .3s;
+    -moz-transition: opacity .3s;
+    -webkit-transition: opacity .3s;
+    -o-transition: opacity .3s;
+}
+
+.tabToolbar.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.tabToolbar button,
+.tabToolbar .button,
+.tabToolbar input[type="button"] {
+  float: right;
+  padding: 0;
+  width: 5rem;
+  height: 100%;
+  background: none;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: none;
+  font-size: 0;
+  border-radius: 0;
+}
+
+.tabToolbar button:active,
+.tabToolbar .button:active,
+.tabToolbar input[type="button"]:active {
+  background-color: #dfdfdf;
+  transition: background 0.2s ease;
+    -moz-transition: background 0.2s ease;
+    -webkit-transition: background 0.2s ease;
+    -o-transition: background 0.2s ease;
+}
+
+
+/* Browser */
+.top-button {
+  border-radius: 0;
+  border: none;
+  outline: none;
+  margin: 0;
+}
+
+#browserFrame {
+  width: 100%;
+  border: none;
+  outline: none;
+  height: calc(100% - 3.9rem);
+    height: -moz-calc(100% - 3.9rem);
+    height: -webkit-calc(100% - 3.9rem);
+}
+
+
+/* Spinner (Throbber) */
+.spinner {
+  border-radius: 8px;
+  background-color: #eee;
+  padding: 10px;
+  opacity: 0;
+  display: inline-block;
+  visibility: hidden;
+  transition: opacity .3s, .3s visibility 0s;
+    -moz-transition: opacity .3s, .3s visibility 0s;
+    -webkit-transition: opacity .3s, .3s visibility 0s;
+    -o-transition: opacity .3s, .3s visibility 0s;
+  pointer-events: none;
+}
+
+.spinner:hover, .spinner:active, .spinner:focus {
+  opacity: .3 !important;
+}
+
+.spinner.center {
+  position: fixed;
+  left: calc(50% - 53px / 2);
+    left: -moz-calc(50% - 53px / 2);
+    left: -webkit-calc(50% - 53px / 2);
+  top: calc(50% - 53px / 2);
+    top: -moz-calc(50% - 53px / 2);
+    top: -webkit-calc(50% - 53px / 2);
+}
+
+.spinner.shown {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .3s, 0s visibility 0s;
+    -moz-transition: opacity .3s, 0s visibility 0s;
+    -webkit-transition: opacity .3s, 0s visibility 0s;
+    -o-transition: opacity .3s, 0s visibility 0s;
+}
+
+.spinner > div {
+  background-image: url(icons/misc/spinner.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 33px;
+  height: 33px;
+  animation: spin .5s steps(30) infinite;
+    -moz-animation: spin .5s steps(30) infinite;
+    -webkit-animation: spin .5s steps(30) infinite;
+    -o-animation: spin .5s steps(30) infinite;
+}
+
+@keyframes spin{
+  0%{
+    transform: rotate(0turn);
+      -moz-transform: rotate(0turn);
+      -webkit-transform: rotate(0turn);
+      -o-transform: rotate(0turn);
+      -ms-transform: rotate(0turn);
+  }
+  100%{
+    transform: rotate(1turn);
+      -moz-transform: rotate(1turn);
+      -webkit-transform: rotate(1turn);
+      -o-transform: rotate(1turn);
+      -ms-transform: rotate(1turn);
+  }
+}
+@-moz-keyframes spin{
+  0%{
+    transform: rotate(0turn);
+      -moz-transform: rotate(0turn);
+  }
+  100%{
+    transform: rotate(1turn);
+      -moz-transform: rotate(1turn);
+  }
+}
+@-webkit-keyframes spin{
+  0%{
+    transform: rotate(0turn);
+      -webkit-transform: rotate(0turn);
+  }
+  100%{
+    transform: rotate(1turn);
+      -webkit-transform: rotate(1turn);
+  }
+}
+@-o-keyframes spin{
+  0%{
+    transform: rotate(0turn);
+      -o-transform: rotate(0turn);
+  }
+  100%{
+    transform: rotate(1turn);
+      -o-transform: rotate(1turn);
+  }
+}

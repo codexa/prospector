@@ -12,9 +12,6 @@
     "device-storage:sdcard":{
       "access": "readwrite"
     },
-    "device-storage:apps":{
-      "access": "readwrite"
-    },
     "device-storage:music":{
       "access": "readwrite"
     },

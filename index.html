@@ -1,0 +1,46 @@
+<!--
+* Prospector
+* A web-based file browser
+* Copyright (C) Codexa Organization 2013.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <link href="style/icons/app/64.png" rel="icon" type="image/x-icon" />
+  <link href="style/icons/app/64.png" rel="shortcut icon" type="image/x-icon" />
+
+  <title>Prospector</title>
+
+  <!-- Scripts -->
+  <script type="text/javascript" src="scripts/regions.js"></script>
+  <script type="text/javascript" src="scripts/io.js"></script>
+  <script type="text/javascript" src="scripts/prospector.js"></script>
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" type="text/css" href="style/lists.css" />
+  <link rel="stylesheet" type="text/css" href="style/headers.css" />
+  <link rel="stylesheet" type="text/css" href="style/regions.css" />
+  <link rel="stylesheet" type="text/css" href="style/icons.css" />
+  <link rel="stylesheet" type="text/css" href="style/main.css" />
+  <link rel="stylesheet" type="text/css" href="style/desktop.css" />
+
+</head>
+<body role="application">
+  <section role="region" id="welcome">
+    <header>
+      <h1 class="prospector">Prospector</h1>
+    </header>
+    <div role="main" class="header-only">
+      <article data-type="list" data-type="file">
+        <div id="file-area">
+          <h2>SD Card</h2>
+          <ul id="file-list"></ul>
+        </div>
+      </article>
+    </div>
+  </section>
+</body>
+</html>

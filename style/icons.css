@@ -1,0 +1,11 @@
+.file-item-icon {
+  width: 4rem;
+  background-size: 4rem;
+  background-repeat: no-repeat;
+  background-position: center;
+  padding-right: 5px;
+}
+
+[data-icon="folder"] {
+  background-image: url(../img/extensions/folder.svg);
+}
