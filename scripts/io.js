@@ -57,6 +57,14 @@ io.enumerate = function (directory, callback) {
   if (directory) {
     // List of files
     var FILES = [];
+    
+    // Put directory in proper form
+    if (directory.length > 1 && directory[0] == '/') {
+      directory = directory.slice(1);
+    }
+    if (directory[directory.length - 1] != '/') {
+      directory = (directory + '/');
+    }
   
     if (deviceAPI == 'deviceStorage') {
       // Get all the files in the specified directory
@@ -80,9 +88,7 @@ io.enumerate = function (directory, callback) {
         var file = cursor.result;
       
         // Base case
-        if (!cursor.result) {    
-          // Remove duplicates
-            
+        if (!cursor.result) {            
           // Finish
           callback(FILES);
           return FILES;
@@ -92,9 +98,28 @@ io.enumerate = function (directory, callback) {
         var thisFile = io.split(file.name);
         
         // Only get files in the current folder
-        if (thisFile[0] != directory) {
+        if (thisFile[0] != directory) {          
+          // Remove duplicates
+          for (var i = 0; i < FILES.length; i++) {
+            if (FILES[i][0] == directory && FILES[i][1] == thisFile[0] && FILES[i][2] == 'folder') {
+	          FILES.splice(i, 1);
+	          break;
+	        }
+          }
+          
+          // Add folder to the list
+          FILES.push([directory, thisFile[0], 'folder']);
+          
           cursor.continue();
           return; 
+        }
+        
+        // Remove duplicates
+        for (var i = 0; i < FILES.length; i++) {
+          if (FILES[i][0] == thisFile[0] && FILES[i][1] == thisFile[1] && FILES[i][2] == thisFile[2]) {
+	        FILES.splice(i, 1);
+	        break;
+	      }
         }
         
         // Add to list of files

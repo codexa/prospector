@@ -20,7 +20,7 @@ prospector.files = {};
 // Misc
 var deviceType;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
-var fileArea, fileList;
+var fileArea, fileList, currentDirectory, currentDirectoryDisplay;
 
 
 /* Start
@@ -60,6 +60,8 @@ prospector.init = function () {
   // Select important elements
   fileArea = document.getElementById('file-area');
   fileList = document.getElementById('file-list');
+  currentDirectory = document.getElementById('current-directory');
+  currentDirectoryDisplay = document.getElementById('current-directory-display');
   
   // Initialize IO
   io.start(null, function(error) {
@@ -67,8 +69,8 @@ prospector.init = function () {
       // Navigate to the main screen
       nav('welcome');
     
-      // Update File Lists
-      prospector.files.update();
+      // Open root
+      prospector.openDirectory('/');
     } else {
       // Navigate to the main screen
       nav('welcome');
@@ -79,13 +81,17 @@ prospector.init = function () {
 
 /* File lists
 ------------------------*/
-prospector.files.update = function () {
-  io.enumerate('/', function(FILES) {
-    buildFileList(FILES, [fileList], 'Files Found');
+prospector.openDirectory = function (directory) {
+  io.enumerate((directory), function(FILES) {
+    prospector.buildFileList(FILES, [fileList], 'Files Found');
   });
+  
+  currentDirectory.textContent = directory;
+  currentDirectoryDisplay.textContent = directory;
+  window.title = (directory + ' - Prospector');
 };
 
-function buildFileList(FILES, listElms, display) {  
+prospector.buildFileList = function (FILES, listElms, display) {  
   if (listElms && FILES) {
     var output = '';  
   
@@ -115,40 +121,91 @@ function buildFileList(FILES, listElms, display) {
       listElms[i].innerHTML = output;
     }
   }
-}
+};
 
 function fileItem(directory, name, type) {
-  var output, shownDirectory, iconGroup, icon;
+  var output, shownDirectory, shownType, iconGroup, icon;
   if (directory && name && type) {
-    // Directory refinements
+    // Display refinements
     if (directory.charAt(0) == '/') {
       shownDirectory = directory;
     } else {
       shownDirectory = directory;
     }
+    name = name.replace(/\//gi, '');
     
-    // Find type extension (TBD)
-    
-    // Icon
-    if (iconGroup == 'folder') {
+    // Type handling
+    if (type == 'folder') {
       icon = 'folder';
-    } else if (iconGroup == 'image') {
-      // TBD code to generate icon from image
+      shownType = '';
     } else {
-      // TBD code to generate icon with filetype.
+      shownType = type;
     }
     
     // Generate item
-    output = '<li class="file-list-item" data-click="open" data-click-directory="'+directory+'" data-click-filename="'+name+'" data-click-filetype="'+type+'">';
+    output = '<li class="file-list-item" data-click="open" data-click-directory="'+directory+'" data-click-name="'+name+'" data-click-type="'+type+'">';
     output += '<a href="#">';
     output += '<div class="file-item-info">';
     if (icon) {
       output += '<aside class="file-item-icon" data-icon="'+icon+'"></aside>';
     }
-    output += '<p class="file-item-name">'+name+type+'</p>'; 
-    output += '<p class="file-item-type">'+shownDirectory+name+type+'</p>';
+    output += '<p class="file-item-name">'+name+shownType+'</p>'; 
+    output += '<p class="file-item-type">'+shownDirectory+name+shownType+'</p>';
     output += '</div>'; 
     output += '</a></li>';  
   }
   return output;
+}
+
+
+/* Actions
+------------------------*/ 
+document.addEventListener('click', function(event) {
+  processActions('data-click', event.target);
+});
+
+document.addEventListener('submit', function(event) {
+  processActions('data-submit', event.target);
+});
+
+document.addEventListener('keypress', function(event) {
+  if (event.key == 13 | event.keyCode == 13) {
+    processActions('data-enter', event.target);
+  }
+});
+
+document.addEventListener('mousedown', function(event) {
+  processActions('data-mouse-down', event.target);
+});
+
+document.addEventListener('change', function(event) {
+  processActions('data-change', event.target);
+});
+
+document.addEventListener('focus', function(event) {
+  processActions('data-focus', event.target);
+});
+
+document.addEventListener('blur', function(event) {
+  processActions('data-blur', event.target);
+});
+
+function processActions(eventAttribute, target) {
+  if (target && target.getAttribute) {
+    if (target.hasAttribute(eventAttribute) != true) {
+      while (target.parentNode && target.parentNode.getAttribute) {
+        target = target.parentNode;
+        if (target.hasAttribute(eventAttribute)) {
+          break;
+        }
+      }
+    }
+    var calledFunction = target.getAttribute(eventAttribute);
+    if (calledFunction == 'open') {
+      // Special folder action
+      if (target.getAttribute(eventAttribute+'-type') == 'folder') {
+        prospector.openDirectory(target.getAttribute(eventAttribute+'-directory') + target.getAttribute(eventAttribute+'-name'));
+      }
+    } 
+  }
 }

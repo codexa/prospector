@@ -22,7 +22,7 @@ html, body {
   src: local('OpenSans'), url(fonts/OpenSans.woff) format('woff');
 }
 
-section > header:first-child h1.prospector {
+section > header:first-child h1.center {
   vertical-align: middle;
   text-align: center !important;
 }
