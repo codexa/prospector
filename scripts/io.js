@@ -97,29 +97,45 @@ io.enumerate = function (directory, callback) {
         // Split name into parts
         var thisFile = io.split(file.name);
         
+        // Don't get system files or root directories
+        if (!thisFile[1] |
+             thisFile[1] == '' |
+             thisFile[2] == '.DS_STORE' |
+             thisFile[0].contains(directory) != true) {
+          cursor.continue();
+          return;        
+        }
+        
         // Only get files in the current folder
-        if (thisFile[0] != directory) {        
+        if (thisFile[0] != directory) {          
+          // Split directory into current directory and folder
+          if (thisFile[0].contains(directory) && directory != '/') {
+            var regRemove = new RegExp(directory);
+            thisFile[1] = thisFile[0].replace(regRemove, '');
+            thisFile[0] = directory;
+          } else {
+            thisFile[1] = thisFile[0];
+            thisFile[0] = directory;
+          }
+          
+          // Remove descendants of descendants
+          while (thisFile[1].contains('/')) {
+            thisFile[1] = thisFile[1].substring(0, thisFile[1].lastIndexOf('/'));
+          }
+          
           // Remove duplicates
           for (var i = 0; i < FILES.length; i++) {
-            if (FILES[i][0] == directory && FILES[i][1] == thisFile[0] && FILES[i][2] == 'folder') {
+            if (FILES[i][0] == directory && FILES[i][1] == thisFile[1] && FILES[i][2] == 'folder') {
 	          FILES.splice(i, 1);
 	          break;
 	        }
           }
           
           // Add folder to the list
-          FILES.push([directory, thisFile[0], 'folder']);
+          FILES.push([directory, thisFile[1], 'folder']);
           
           cursor.continue();
           return; 
-        }
-        
-        // Don't get system files
-        if (!thisFile[1] |
-             thisFile[1] == '' |
-             thisFile[2] == '.DS_STORE') {
-          cursor.continue();
-          return;        
         }
         
         // Remove duplicates

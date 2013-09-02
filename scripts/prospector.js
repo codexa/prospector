@@ -101,14 +101,18 @@ prospector.openDirectory = function (directory, backwards) {
   
   // Update displays
   currentDirectory.textContent = directory;
-  currentDirectoryDisplay.textContent = directory;
+  if (directory == '/') {
+    currentDirectoryDisplay.textContent = '/';
+  } else {
+    currentDirectoryDisplay.textContent = directory.substring((directory.lastIndexOf('/') + 1));
+  }
   window.title = (directory + ' - Prospector');
   
   // Add to folderTree
   folderTree = directory;
   
   // Enable/disable back button
-  if (folderTree.length > 0) {
+  if (folderTree != '/') {
     document.getElementById('back-button').classList.remove('disabled');
   } else {
     document.getElementById('back-button').classList.add('disabled');  
