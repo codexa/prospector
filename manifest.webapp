@@ -70,8 +70,8 @@
   },
   "default_locale": "en-US",
   "icons": {
-    "64": "/img/icons/ic/app_logo64.png",
-    "128": "/img/icons/ic/app_logo128.png",
-    "256": "/img/icons/ic/app_logo256.png"
+    "64": "/img/app/ic/app64.png",
+    "128": "/img/app/ic/app128.png",
+    "256": "/img/app/ic/app256.png"
   }
 }
