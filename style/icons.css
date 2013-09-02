@@ -1,9 +1,18 @@
+/* UI Icons */
+[data-icon="back"] {
+  background-image: url(../img/misc/back.svg);
+  background-size: 1rem !important;
+}
+
+
+/* File Icons */
 .file-item-icon {
   width: 4rem;
   background-size: 4rem;
   background-repeat: no-repeat;
   background-position: center;
   padding-right: 5px;
+  pointer-events: none;
 }
 
 [data-icon="folder"] {

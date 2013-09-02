@@ -20,7 +20,8 @@ prospector.files = {};
 // Misc
 var deviceType;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
-var fileArea, fileList, currentDirectory, currentDirectoryDisplay;
+var fileArea, currentDirectory, currentDirectoryDisplay;
+var folderTree;
 
 
 /* Start
@@ -59,7 +60,6 @@ prospector.init = function () {
   
   // Select important elements
   fileArea = document.getElementById('file-area');
-  fileList = document.getElementById('file-list');
   currentDirectory = document.getElementById('current-directory');
   currentDirectoryDisplay = document.getElementById('current-directory-display');
   
@@ -81,19 +81,43 @@ prospector.init = function () {
 
 /* File lists
 ------------------------*/
-prospector.openDirectory = function (directory) {
+prospector.openDirectory = function (directory, backwards) {
+  // Generate file list
   io.enumerate((directory), function(FILES) {
-    prospector.buildFileList(FILES, [fileList], 'Files Found');
+    if (backwards == true) {
+      prospector.buildFileList(FILES, [fileArea.firstElementChild], 'Files Found');
+      
+      // Animation!
+      var removedNode = fileArea.removeChild(fileArea.lastElementChild);
+      fileArea.insertBefore(removedNode, fileArea.children[0]);
+    } else {
+      prospector.buildFileList(FILES, [fileArea.lastElementChild], 'Files Found');
+      
+      // Animation!
+      var removedNode = fileArea.removeChild(fileArea.firstElementChild);
+      fileArea.appendChild(removedNode);
+    }
   });
   
+  // Update displays
   currentDirectory.textContent = directory;
   currentDirectoryDisplay.textContent = directory;
   window.title = (directory + ' - Prospector');
+  
+  // Add to folderTree
+  folderTree = directory;
+  
+  // Enable/disable back button
+  if (folderTree.length > 0) {
+    document.getElementById('back-button').classList.remove('disabled');
+  } else {
+    document.getElementById('back-button').classList.add('disabled');  
+  }
 };
 
 prospector.buildFileList = function (FILES, listElms, display) {  
   if (listElms && FILES) {
-    var output = '';  
+    var output = '<ul>';  
   
     // Make sure list is not an edit list
     for (var i = 0; i < listElms.length; i++) {
@@ -110,21 +134,21 @@ prospector.buildFileList = function (FILES, listElms, display) {
       }
     } else {
       // No docs message
-      output = '<li style="margin-top: 1rem;" class="noLink">';
+      output = '<ul><li style="margin-top: 1rem;" class="noLink">';
       output += '<p>No ' + display + '</p>';
       output += "<p>Click the compose icon to create one.</p>";
-      output += '</li>';      
+      output += '</li></ul>';      
     }
     
     // Display output HTML
     for (var i = 0; i < listElms.length; i++) {
-      listElms[i].innerHTML = output;
+      listElms[i].innerHTML = (output + '</ul>');
     }
   }
 };
 
 function fileItem(directory, name, type) {
-  var output, shownDirectory, shownType, iconGroup, icon;
+  var output = '', shownDirectory, shownType, iconGroup, icon;
   if (directory && name && type) {
     // Display refinements
     if (directory.charAt(0) == '/') {
@@ -206,6 +230,17 @@ function processActions(eventAttribute, target) {
       if (target.getAttribute(eventAttribute+'-type') == 'folder') {
         prospector.openDirectory(target.getAttribute(eventAttribute+'-directory') + target.getAttribute(eventAttribute+'-name'));
       }
-    } 
+    } else if (calledFunction == 'previous') {
+      if (folderTree.length > 0) {
+        // Take out current folder
+        var tempDir = folderTree.substring(0, folderTree.lastIndexOf('/'));
+        if (!tempDir | tempDir == '') {
+          tempDir = '/';
+        }
+              
+        // Open parent folder
+        prospector.openDirectory(tempDir, true);
+      }
+    }
   }
 }

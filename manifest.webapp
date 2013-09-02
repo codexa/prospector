@@ -24,47 +24,47 @@
   },
   "locales": {
     "en-US": {
-      "name": "Propector",
+      "name": "Prospector",
       "description": "A File Explorer for Firefox OS"
     },
     "ar": {
-      "name": "Propector",
+      "name": "Prospector",
   	  "description": "A مستكشف الملفات لفايرفوكس OS"
     },
     "de": {
-  	  "name": "Propector",
+  	  "name": "Prospector",
   	  "description": "Ein Datei-Explorer für Firefox OS"
     },
     "el": {
-  	  "name": "Propector",
+  	  "name": "Prospector",
   	  "description": "Μια File Explorer για τον Firefox OS"
     },
     "es": {
-  	  "name": "Propector",
+  	  "name": "Prospector",
   	  "description": "Un explorador de archivos para Firefox OS"
     },
     "fr": {
-  	  "name": "Propector",
+  	  "name": "Prospector",
   	  "description": "Un explorateur de fichiers pour Firefox OS"
     },
     "it": {
-  	  "name": "Propector",
+  	  "name": "Prospector",
   	  "description": "Un File Explorer per Firefox OS"
     },
     "pt-BR": {
-  	  "name": "Propector",
+  	  "name": "Prospector",
   	  "description": "A File Explorer para o Firefox OS"
     },
     "ru": {
-  	  "name": "Propector",
+  	  "name": "Prospector",
   	  "description": "File Explorer для Firefox OS"
     },
     "tr": {
-  	  "name": "Propector",
+  	  "name": "Prospector",
   	  "description": "Firefox OS için bir Dosya Gezgini"
     },
     "zh-TW": {
-  	  "name": "Propector",
+  	  "name": "Prospector",
   	  "description": "一个文件浏览器火狐OS"
     }
   },

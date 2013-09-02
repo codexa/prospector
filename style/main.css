@@ -25,6 +25,10 @@ html, body {
 section > header:first-child h1.center {
   vertical-align: middle;
   text-align: center !important;
+  max-width: calc(100% - 5rem);
+    max-width: -moz-calc(100% - 5rem);
+    max-width: -webkit-calc(100% - 5rem);
+  margin: 0 auto;
 }
 
 [role="main"].header-only {
@@ -40,6 +44,11 @@ section > header:first-child h1.center {
   text-align: center;
   display: block;
   margin: 1rem;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: .7;
 }
 
 
@@ -142,6 +151,49 @@ form[role=dialog].current {
   padding: 0;
   position: relative;
   top: -.4rem;
+}
+
+.file-area {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.file-area > article {
+  overflow: scroll;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  transform: none;
+    -moz-transform: none;
+    -webkit-transform: none;
+    -o-transform: none;
+    -ms-transform: none;
+  transition: all .4s ease;
+    -moz-transition: all .4s ease;
+    -webkit-transition: all .4s ease;
+    -o-transition: all .4s ease;
+}
+
+.file-area > article:first-child {
+  transform: translateX(-100%);
+    -moz-transform: translateX(-100%);
+    -webkit-transform: translateX(-100%);
+    -o-transform: translateX(-100%); 
+    -ms-transform: translateX(-100%); 
+}
+
+.file-area > article:last-child {
+  transform: translateX(100%);
+    -moz-transform: translateX(100%);
+    -webkit-transform: translateX(100%);
+    -o-transform: translateX(100%); 
+    -ms-transform: translateX(100%); 
 }
 
 

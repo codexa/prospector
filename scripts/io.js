@@ -98,7 +98,7 @@ io.enumerate = function (directory, callback) {
         var thisFile = io.split(file.name);
         
         // Only get files in the current folder
-        if (thisFile[0] != directory) {          
+        if (thisFile[0] != directory) {        
           // Remove duplicates
           for (var i = 0; i < FILES.length; i++) {
             if (FILES[i][0] == directory && FILES[i][1] == thisFile[0] && FILES[i][2] == 'folder') {
@@ -112,6 +112,14 @@ io.enumerate = function (directory, callback) {
           
           cursor.continue();
           return; 
+        }
+        
+        // Don't get system files
+        if (!thisFile[1] |
+             thisFile[1] == '' |
+             thisFile[2] == '.DS_STORE') {
+          cursor.continue();
+          return;        
         }
         
         // Remove duplicates
@@ -166,7 +174,7 @@ io.split = function (path) {
   file[0] = path.substring(0, (path.lastIndexOf('/') + 1));
   file[1] = path.substring((path.lastIndexOf('/') + 1), path.lastIndexOf('.')).replace(/\//, '');
   file[2] = path.substring(path.lastIndexOf('.'), path.length).replace(/\//, '');
-  if (file[1] == '') {
+  if (file[1] == '' && file[2] == '') {
     file[0] = (file[0] + file[2]);
     if (file[0][file[0].length - 1] != '/') {
       file[0] = (file[0] + '/');
