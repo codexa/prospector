@@ -64,13 +64,18 @@ prospector.init = function () {
   currentDirectoryDisplay = document.getElementById('current-directory-display');
   
   // Initialize IO
-  io.start(null, function(error) {
+  io.start(null, function(error, storage) {
     if (!error) {
       // Navigate to the main screen
       nav('welcome');
     
       // Open root
       prospector.openDirectory('/');
+      
+      // Add listener
+      storage.onchange = function (change) {
+        prospector.openDirectory(currentDirectory.textContent);
+      }
     } else {
       // Navigate to the main screen
       nav('welcome');
@@ -186,6 +191,38 @@ function fileItem(directory, name, type) {
 }
 
 
+/* File actions
+------------------------*/
+prospector.open = function (dir, name, type) {
+  if (dir && name && type) {
+    if (prospector.typeGroup(type) == 'image') {
+      // Open image
+      io.load(dir, name, type, function (contents) {
+        document.getElementById('image-box').src = contents;
+        
+        // Show display
+        nav('image');
+        document.getElementById('current-image-display').textContent = (name + type);
+      });    
+    }
+  }
+};
+
+prospector.typeGroup = function (type) {
+  // Make type lower cased
+  type = type.toLowerCase();
+  
+  // Supported images
+  if (type == '.jpg' | type == '.jpeg' |
+      type == '.png' | type == '.gif' |
+      type == '.svg') {
+    type = 'image';
+  }
+
+  return type;
+};
+
+
 /* Actions
 ------------------------*/ 
 document.addEventListener('click', function(event) {
@@ -233,6 +270,8 @@ function processActions(eventAttribute, target) {
       // Special folder action
       if (target.getAttribute(eventAttribute+'-type') == 'folder') {
         prospector.openDirectory(target.getAttribute(eventAttribute+'-directory') + target.getAttribute(eventAttribute+'-name'));
+      } else {
+        prospector.open(target.getAttribute(eventAttribute+'-directory'), target.getAttribute(eventAttribute+'-name'), target.getAttribute(eventAttribute+'-type'));
       }
     } else if (calledFunction == 'previous') {
       if (folderTree.length > 0) {
@@ -245,6 +284,8 @@ function processActions(eventAttribute, target) {
         // Open parent folder
         prospector.openDirectory(tempDir, true);
       }
+    } else if (calledFunction == 'close') {
+      navBack();
     }
   }
 }

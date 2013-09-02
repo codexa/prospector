@@ -197,6 +197,13 @@ form[role=dialog].current {
 }
 
 
+/* File areas */
+#image-box {
+  max-height: 100%;
+  max-width: 100%;
+}
+
+
 /* Buttons */
 .button-block {
   width: 96%;

@@ -30,7 +30,8 @@ io.start = function (api, callback) {
         alert("The SDCard on your device is shared, and thus not available.");
         return;
       } else {
-        callback();
+        callback(null, storage);  
+        return;    
       }
     };
 
@@ -46,8 +47,6 @@ io.start = function (api, callback) {
       callback('Storage method is unavailable');
       return;
   }
-  
-  callback();
 };
 
 
@@ -184,6 +183,44 @@ io.rename = function (directory, name, type, newname, location) {
     io.delete(fullName, location);
   }, location);
 };
+
+io.load = function (directory, filename, filetype, callback) {
+  var filePath = (directory + filename + filetype);
+  if (deviceAPI == 'deviceStorage') {
+    var req = storage.get(filePath);
+    req.onsuccess = function () {
+      var file = req.result;
+      var reader = new FileReader();
+      
+      /* Remove when porting to other projects */
+      if (prospector.typeGroup(filetype) == 'image') {
+        reader.readAsDataURL(file);
+      } else {
+        reader.readAsText(file);
+      }
+      /* End of customized section */
+      
+      reader.onerror = function () {
+        alert('Load unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
+        callback(this.error.name, true);
+      };
+      
+      reader.onload = function () {
+        var file = this.result;    
+        callback(file);
+      };
+    };
+    
+    req.onerror = function () {
+      if (this.error.name == "NotFoundError") {
+        // New file, leave user to edit and save it
+      }
+      else {
+        alert('Load unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
+      }
+    };
+  }
+}
 
 io.split = function (path) {
   var file = new Array();
