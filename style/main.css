@@ -198,9 +198,21 @@ form[role=dialog].current {
 
 
 /* File areas */
-#image-box {
-  max-height: 100%;
-  max-width: 100%;
+#file-box[data-file-type="image"] {
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: black;
+}
+
+#file-box {
+  font-size: 1.5rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+#file-box[data-file-type="text"] {
+  text-align: left;
 }
 
 

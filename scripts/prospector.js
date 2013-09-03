@@ -20,7 +20,7 @@ prospector.files = {};
 // Misc
 var deviceType;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
-var fileArea, currentDirectory, currentDirectoryDisplay;
+var fileArea, fileBox, currentDirectory, currentDirectoryDisplay;
 var folderTree;
 
 
@@ -60,6 +60,7 @@ prospector.init = function () {
   
   // Select important elements
   fileArea = document.getElementById('file-area');
+  fileBox = document.getElementById('file-box');
   currentDirectory = document.getElementById('current-directory');
   currentDirectoryDisplay = document.getElementById('current-directory-display');
   
@@ -194,17 +195,25 @@ function fileItem(directory, name, type) {
 /* File actions
 ------------------------*/
 prospector.open = function (dir, name, type) {
-  if (dir && name && type) {
-    if (prospector.typeGroup(type) == 'image') {
-      // Open image
-      io.load(dir, name, type, function (contents) {
-        document.getElementById('image-box').src = contents;
-        
-        // Show display
-        nav('image');
-        document.getElementById('current-image-display').textContent = (name + type);
-      });    
-    }
+  if (dir && name && type) {    
+    // Open file
+    io.load(dir, name, type, function (contents) {
+      var typeGroup = prospector.typeGroup(type);
+      
+      if (typeGroup == 'image') {
+        // Display image
+        fileBox.setAttribute('style', ('background-image: url('+contents+');'));
+        fileBox.setAttribute('data-file-type', 'image');
+      } else if (typeGroup == 'text') {
+        // Display text
+        fileBox.textContent = contents;
+        fileBox.setAttribute('data-file-type', 'text');
+      }
+    
+      // Show display
+      nav('file');
+      document.getElementById('current-file-display').textContent = (name + type);
+    });    
   }
 };
 
@@ -212,11 +221,13 @@ prospector.typeGroup = function (type) {
   // Make type lower cased
   type = type.toLowerCase();
   
-  // Supported images
+  // Supported files
   if (type == '.jpg' | type == '.jpeg' |
       type == '.png' | type == '.gif' |
       type == '.svg') {
     type = 'image';
+  } else if (type == '.txt') {
+    type = 'text';
   }
 
   return type;
@@ -285,6 +296,11 @@ function processActions(eventAttribute, target) {
         prospector.openDirectory(tempDir, true);
       }
     } else if (calledFunction == 'close') {
+      // Clear file box
+      fileBox.innerHTML = '<span style="color: red;">Not supported...</span>';
+      fileBox.setAttribute('style', '');
+      fileBox.setAttribute('data-file-type', '');
+      document.getElementById('current-file-display').textContent = 'No file open';
       navBack();
     }
   }
