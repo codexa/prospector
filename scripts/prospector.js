@@ -202,6 +202,7 @@ prospector.open = function (dir, name, type) {
       
       if (typeGroup == 'image') {
         // Display image
+        fileBox.innerHTML = '';
         fileBox.setAttribute('style', ('background-image: url('+contents+');'));
         fileBox.setAttribute('data-file-type', 'image');
       } else if (typeGroup == 'text') {
