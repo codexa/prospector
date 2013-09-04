@@ -8,20 +8,12 @@
     "name": "Codexa",
     "url": "http://www.codexa.org"
   },
-  "permissions": {
-    "device-storage:sdcard":{
-      "access": "readwrite"
-    },
-    "device-storage:music":{
-      "access": "readwrite"
-    },
-    "device-storage:pictures":{
-      "access": "readwrite"
-    },
-    "device-storage:videos":{
-      "access": "readwrite"
-    }
+  "icons": {
+    "64": "/img/app/ic/app64.png",
+    "128": "/img/app/ic/app128.png",
+    "256": "/img/app/ic/app256.png"
   },
+  "default_locale": "en-US",
   "locales": {
     "en-US": {
       "name": "Prospector",
@@ -68,10 +60,37 @@
   	  "description": "一个文件浏览器火狐OS"
     }
   },
-  "default_locale": "en-US",
-  "icons": {
-    "64": "/img/app/ic/app64.png",
-    "128": "/img/app/ic/app128.png",
-    "256": "/img/app/ic/app256.png"
+  "permissions": {
+    "device-storage:sdcard":{
+      "access": "readwrite"
+    }
+  },
+  "activities": {
+    "open": {
+      "href": "./index.html",
+      "disposition": "window",
+      "filters": {
+        "path": {
+          "required": true
+        },
+        "type": [
+          "directory/plain"
+        ]
+      },
+      "returnValue": false
+    },
+    "pick": {
+      "href": "./picker.html",
+      "disposition": "inline",
+      "filters": {
+        "path": {
+          "required": false
+        },
+        "type": {
+          "required": false
+        }
+      },
+      "returnValue": false
+    }
   }
 }

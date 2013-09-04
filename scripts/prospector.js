@@ -21,7 +21,8 @@ prospector.files = {};
 var deviceType;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
 var fileArea, fileBox, currentDirectory, currentDirectoryDisplay;
-var folderTree;
+var folderTree, isInitialized;
+prospector.initialized = new CustomEvent('prospector.initialized');
 
 
 /* Start
@@ -77,6 +78,10 @@ prospector.init = function () {
       storage.onchange = function (change) {
         prospector.openDirectory(currentDirectory.textContent);
       }
+      
+      // Dispatch initialized event
+      window.dispatchEvent(prospector.initialized);
+      isInitialized = true;
     } else {
       // Navigate to the main screen
       nav('welcome');
@@ -233,6 +238,27 @@ prospector.typeGroup = function (type) {
 
   return type;
 };
+
+
+/* Web Activities
+------------------------*/ 
+navigator.mozSetMessageHandler('activity', function(activityRequest) {
+  var activity = activityRequest.source;
+  
+  // Wait for Prospector to be initialized
+  window.addEventListener('prospector.initialized', function () {
+    // Handle activities
+    if (activity.name === "open") {
+      // Open folder
+      prospector.openDirectory(activity.data.path);
+    } else if (activity.name === "pick") {
+      // Show pick screen TBD
+    }
+  });
+  if (isInitialized == true) {
+    window.dispatchEvent(prospector.initialized);
+  }
+});
 
 
 /* Actions
