@@ -20,7 +20,7 @@ prospector.files = {};
 // Misc
 var deviceType;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
-var fileArea, fileBox, currentDirectory, currentDirectoryDisplay;
+var fileArea, fileBox, fileEdit, docList, editState, currentDirectory, currentDirectoryDisplay;
 var folderTree, isInitialized;
 prospector.initialized = new CustomEvent('prospector.initialized');
 
@@ -60,7 +60,7 @@ prospector.init = function () {
   checkDevice();
   
   // Select important elements
-  fileArea = document.getElementById('file-area');
+  fileArea = document.getElementById('file-area')
   fileBox = document.getElementById('file-box');
   currentDirectory = document.getElementById('current-directory');
   currentDirectoryDisplay = document.getElementById('current-directory-display');
@@ -87,8 +87,32 @@ prospector.init = function () {
       nav('welcome');
     }
   });
+  
+  // Add event listeners
+  fileArea.addEventListener(
+    'contextmenu', function contextmenu(event) {
+      editDocs();
+    }
+  );
 };
 
+function editDocs() {
+  fileArea = document.getElementById('file-area'),
+  fileEdit = document.getElementById('edit-mode'),
+  docList = document.querySelectorAll('[data-type="list"]');
+  if (editState == true) {
+    editState = false;
+    fileEdit.className="";
+    fileArea.style.display = 'block';
+  } else {
+    fileEdit.className="current";
+    for(var i=0; i<docList.length; i++){
+      docList[i].className="danger";
+    }
+    fileArea.style.display = 'block';
+    editState = true;
+  }
+}
 
 /* File lists
 ------------------------*/
