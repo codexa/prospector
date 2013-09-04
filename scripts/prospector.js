@@ -145,7 +145,7 @@ prospector.buildFileList = function (FILES, listElms, display) {
     if (FILES.length > 0) {
       for (var f = 0; f < FILES.length; f++) {
         // Create item
-        output += fileItem(FILES[f][0], FILES[f][1], FILES[f][2]);
+        output += fileItem(FILES[f][0], FILES[f][1], FILES[f][2], FILES[f][3]);
       }
     } else {
       // No docs message
@@ -162,7 +162,7 @@ prospector.buildFileList = function (FILES, listElms, display) {
   }
 };
 
-function fileItem(directory, name, type) {
+function fileItem(directory, name, type, mime) {
   var output = '', shownDirectory, shownType, iconGroup, icon;
   if (directory && name && type) {
     // Display refinements
@@ -182,7 +182,7 @@ function fileItem(directory, name, type) {
     }
     
     // Generate item
-    output = '<li class="file-list-item" data-click="open" data-click-directory="'+directory+'" data-click-name="'+name+'" data-click-type="'+type+'">';
+    output = '<li class="file-list-item" data-click="open" data-click-directory="'+directory+'" data-click-name="'+name+'" data-click-type="'+type+'" data-click-mime="'+mime+'">';
     output += '<a href="#">';
     output += '<div class="file-item-info">';
     if (icon) {
@@ -199,44 +199,28 @@ function fileItem(directory, name, type) {
 
 /* File actions
 ------------------------*/
-prospector.open = function (dir, name, type) {
-  if (dir && name && type) {    
-    // Open file
-    io.load(dir, name, type, function (contents) {
-      var typeGroup = prospector.typeGroup(type);
-      
-      if (typeGroup == 'image') {
-        // Display image
-        fileBox.innerHTML = '';
-        fileBox.setAttribute('style', ('background-image: url('+contents+');'));
-        fileBox.setAttribute('data-file-type', 'image');
-      } else if (typeGroup == 'text') {
-        // Display text
-        fileBox.textContent = contents;
-        fileBox.setAttribute('data-file-type', 'text');
+prospector.open = function (dir, name, type, mime) {
+  if (dir && name && type && mime) {
+    // Open with Web Activities
+    var activity = new MozActivity({  
+      // Ask for the "open" activity
+      name: "open",
+
+      // Provide the data required by the filters of the activity
+      data: {
+        path: (dir + name + type),
+        type: mime
       }
-    
-      // Show display
-      nav('file');
-      document.getElementById('current-file-display').textContent = (name + type);
-    });    
-  }
-};
+    });
 
-prospector.typeGroup = function (type) {
-  // Make type lower cased
-  type = type.toLowerCase();
-  
-  // Supported files
-  if (type == '.jpg' | type == '.jpeg' |
-      type == '.png' | type == '.gif' |
-      type == '.svg') {
-    type = 'image';
-  } else if (type == '.txt') {
-    type = 'text';
-  }
+    activity.onsuccess = function() {
+      console.log('File has been closed.');
+    };
 
-  return type;
+    activity.onerror = function() {
+      console.log(this.error);
+    };
+  }
 };
 
 
@@ -309,7 +293,7 @@ function processActions(eventAttribute, target) {
       if (target.getAttribute(eventAttribute+'-type') == 'folder') {
         prospector.openDirectory(target.getAttribute(eventAttribute+'-directory') + target.getAttribute(eventAttribute+'-name'));
       } else {
-        prospector.open(target.getAttribute(eventAttribute+'-directory'), target.getAttribute(eventAttribute+'-name'), target.getAttribute(eventAttribute+'-type'));
+        prospector.open(target.getAttribute(eventAttribute+'-directory'), target.getAttribute(eventAttribute+'-name'), target.getAttribute(eventAttribute+'-type'), target.getAttribute(eventAttribute+'-mime'));
       }
     } else if (calledFunction == 'previous') {
       if (folderTree.length > 0) {

@@ -95,6 +95,7 @@ io.enumerate = function (directory, callback) {
         
         // Split name into parts
         var thisFile = io.split(file.name);
+        thisFile[3] = file.type;
         
         // Don't get system files or root directories
         if (!thisFile[1] |
