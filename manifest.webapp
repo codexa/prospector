@@ -80,7 +80,7 @@
       "returnValue": false
     },
     "pick": {
-      "href": "./picker.html",
+      "href": "./sieve.html",
       "disposition": "inline",
       "filters": {
         "path": {
@@ -90,7 +90,7 @@
           "required": false
         }
       },
-      "returnValue": false
+      "returnValue": true
     }
   }
 }

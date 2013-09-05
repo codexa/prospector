@@ -4,6 +4,11 @@
   background-size: 1rem !important;
 }
 
+[data-icon="close"] {
+  background-image: url(../img/misc/close.svg);
+  background-size: 1.8rem !important;
+}
+
 
 /* File Icons */
 .file-item-icon {

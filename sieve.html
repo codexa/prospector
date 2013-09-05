@@ -1,6 +1,6 @@
 <!--
-* Prospector
-* A web-based file browser
+* Sieve
+* Prospector's file picker
 * Copyright (C) Codexa Organization 2013.
 -->
 
@@ -12,7 +12,7 @@
   <link href="img/app/ic/app64.png" rel="icon" type="image/x-icon" />
   <link href="img/app/ic/app64.png" rel="shortcut icon" type="image/x-icon" />
 
-  <title>Prospector</title>
+  <title>Pick a File</title>
 
   <!-- Scripts -->
   <script type="text/javascript" src="scripts/regions.js"></script>
@@ -26,44 +26,20 @@
   <link rel="stylesheet" type="text/css" href="style/icons.css" />
   <link rel="stylesheet" type="text/css" href="style/main.css" />
   <link rel="stylesheet" type="text/css" href="style/desktop.css" />
-  <link rel="stylesheet" type="text/css" href="style/edit_mode.css" />
 
 </head>
 <body role="application">
-  <section role="region" id="welcome">
+  <section role="region" id="welcome" class="current">
     <header>
-      <button data-click="previous" id="back-button" class="disabled"><span class="icon" data-icon="back">&lt;</span></button>
-      <h1 class="center" id="current-directory-display">Prospector</h1>
+      <button data-click="sieve-back" id="back-button"><span class="icon" data-icon="close">&lt;</span></button>
+      <h1 class="center">Pick a File</h1>
     </header>
-    <div role="edit" data-type="edit" id="edit-mode">
-      <section>
-        <header>
-          <menu type="toolbar">
-            <button onclick="editDocs()">Done</button>
-          </menu>
-          <h1>Edit docs</h1>
-        </header>
-      </section>
-      <menu id="selectButtons">
-        <button data-click="selectAll">Select all</button>
-        <button data-click="delete" class="danger">Delete selected</button>
-      </menu>
-    </div>
     <div role="main" class="header-only">
       <div id="file-area" class="file-area">
         <article data-type="list"></article>
         <article data-type="list"></article>
         <article data-type="list"></article>
       </div>
-    </div>
-  </section>
-  <section role="region" id="file">
-    <header>
-      <button data-click="close"><span class="icon" data-icon="back">&lt;</span></button>
-      <h1 class="center" id="current-file-display">No file open</h1>
-    </header>
-    <div role="main" class="header-only" id="file-box">
-      <span style="color: red;">Not supported...</span>
     </div>
   </section>
   <hidden style="display: none;" id="current-directory"></hidden>

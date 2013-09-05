@@ -17,6 +17,9 @@ var prospector = {};
 // Files Namespace
 prospector.files = {};
 
+// Sieve
+var sieve, pickActivity;
+
 // Misc
 var deviceType;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
@@ -55,7 +58,11 @@ function checkDevice() {
 
 /* Initalize
 ------------------------*/
-prospector.init = function () {    
+prospector.init = function () {
+  if (window.location.pathname == '/sieve.html') {
+    sieve = true;
+  }
+   
   // Find device type
   checkDevice();
   
@@ -63,7 +70,9 @@ prospector.init = function () {
   fileArea = document.getElementById('file-area')
   fileBox = document.getElementById('file-box');
   currentDirectory = document.getElementById('current-directory');
-  currentDirectoryDisplay = document.getElementById('current-directory-display');
+  if (sieve != true) {
+    currentDirectoryDisplay = document.getElementById('current-directory-display');
+  }
   
   // Initialize IO
   io.start(null, function(error, storage) {
@@ -135,22 +144,34 @@ prospector.openDirectory = function (directory, backwards) {
   });
   
   // Update displays
-  currentDirectory.textContent = directory;
-  if (directory == '/') {
-    currentDirectoryDisplay.textContent = '/';
-  } else {
-    currentDirectoryDisplay.textContent = directory.substring((directory.lastIndexOf('/') + 1));
+  if (sieve != true) {
+    if (directory == '/') {
+      currentDirectoryDisplay.textContent = '/';
+    } else {
+      currentDirectoryDisplay.textContent = directory.substring((directory.lastIndexOf('/') + 1));
+    }
   }
+  currentDirectory.textContent = directory;
   window.title = (directory + ' - Prospector');
   
   // Add to folderTree
   folderTree = directory;
   
-  // Enable/disable back button
-  if (folderTree != '/') {
-    document.getElementById('back-button').classList.remove('disabled');
+  // Different actions for Prospector and Sieve
+  if (sieve == true) {
+    // Change function of back button
+    if (folderTree != '/') {
+      document.querySelector('#back-button .icon').setAttribute('data-icon', 'back');
+    } else {
+      document.querySelector('#back-button .icon').setAttribute('data-icon', 'close');  
+    }
   } else {
-    document.getElementById('back-button').classList.add('disabled');  
+    // Enable/disable back button
+    if (folderTree != '/') {
+      document.getElementById('back-button').classList.remove('disabled');
+    } else {
+      document.getElementById('back-button').classList.add('disabled');  
+    }
   }
 };
 
@@ -175,7 +196,6 @@ prospector.buildFileList = function (FILES, listElms, display) {
       // No docs message
       output = '<ul><li style="margin-top: 1rem;" class="noLink">';
       output += '<p>No ' + display + '</p>';
-      output += "<p>Click the compose icon to create one.</p>";
       output += '</li></ul>';      
     }
     
@@ -206,9 +226,18 @@ function fileItem(directory, name, type, mime) {
     }
     
     // Generate item
-    output = '<li class="file-list-item" data-click="open" data-click-directory="'+directory+'" data-click-name="'+name+'" data-click-type="'+type+'" data-click-mime="'+mime+'">';
-    output += '<a href="#">';
-    output += '<div class="file-item-info">';
+    if (sieve == true) {
+      output = '<li class="file-list-item" data-click="sieve-select" data-click-directory="'+directory+'" data-click-name="'+name+'" data-click-extension="'+type+'" data-click-mime="'+mime+'">';
+      output += '<a href="#">';
+      output += '<div class="file-item-info">';
+      if (type != 'folder') {
+        output += '<aside class="pack-end"><input type="checkbox" /></aside>';
+      }
+    } else {
+      output = '<li class="file-list-item" data-click="open" data-click-directory="'+directory+'" data-click-name="'+name+'" data-click-extension="'+type+'" data-click-mime="'+mime+'">';
+      output += '<a href="#">';
+      output += '<div class="file-item-info">';
+    }
     if (icon) {
       output += '<aside class="file-item-icon" data-icon="'+icon+'"></aside>';
     }
@@ -260,10 +289,11 @@ navigator.mozSetMessageHandler('activity', function(activityRequest) {
       // Open folder
       prospector.openDirectory(activity.data.path);
     } else if (activity.name === "pick") {
-      // Show pick screen TBD
+      // Sieve
+      pickActivity = activityRequest;
     }
   });
-  if (isInitialized == true) {
+  if (isInitialized == true && sieve != true) {
     window.dispatchEvent(prospector.initialized);
   }
 });
@@ -314,10 +344,10 @@ function processActions(eventAttribute, target) {
     var calledFunction = target.getAttribute(eventAttribute);
     if (calledFunction == 'open') {
       // Special folder action
-      if (target.getAttribute(eventAttribute+'-type') == 'folder') {
+      if (target.getAttribute(eventAttribute+'-extension') == 'folder') {
         prospector.openDirectory(target.getAttribute(eventAttribute+'-directory') + target.getAttribute(eventAttribute+'-name'));
       } else {
-        prospector.open(target.getAttribute(eventAttribute+'-directory'), target.getAttribute(eventAttribute+'-name'), target.getAttribute(eventAttribute+'-type'), target.getAttribute(eventAttribute+'-mime'));
+        prospector.open(target.getAttribute(eventAttribute+'-directory'), target.getAttribute(eventAttribute+'-name'), target.getAttribute(eventAttribute+'-extension'), target.getAttribute(eventAttribute+'-mime'));
       }
     } else if (calledFunction == 'previous') {
       if (folderTree.length > 0) {
@@ -337,6 +367,31 @@ function processActions(eventAttribute, target) {
       fileBox.setAttribute('data-file-type', '');
       document.getElementById('current-file-display').textContent = 'No file open';
       navBack();
+    } else if (calledFunction == 'sieve-select') {
+      // Special folder action
+      if (target.getAttribute(eventAttribute+'-extension') == 'folder') {
+        prospector.openDirectory(target.getAttribute(eventAttribute+'-directory') + target.getAttribute(eventAttribute+'-name'));
+      } else {
+        // Select item (TBD)
+        // Close Sieve
+        pickActivity.postResult(target.getAttribute(eventAttribute+'-directory') + target.getAttribute(eventAttribute+'-name') + target.getAttribute(eventAttribute+'-extension'));
+        pickActivity = null;
+      }
+    } else if (calledFunction == 'sieve-back') {
+      if (folderTree != '/') {
+        // Take out current folder
+        var tempDir = folderTree.substring(0, folderTree.lastIndexOf('/'));
+        if (!tempDir | tempDir == '') {
+          tempDir = '/';
+        }
+              
+        // Open parent folder
+        prospector.openDirectory(tempDir, true);
+      } else {
+        // Close Sieve
+        pickActivity.postResult(null);
+        pickActivity = null;
+      }
     }
   }
 }
