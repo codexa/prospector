@@ -38,6 +38,13 @@ section > header:first-child h1.center {
   overflow: scroll;
 }
 
+[role="main"].edit-mode {
+  height: calc(100% - 12rem);
+    height: -moz-calc(100% - 12rem);
+    height: -webkit-calc(100% - 12rem);
+  overflow: scroll;
+}
+
 .redAlert {
   color: red;
   font-size: 2rem;
@@ -48,7 +55,7 @@ section > header:first-child h1.center {
 
 .disabled {
   pointer-events: none;
-  opacity: .7;
+  opacity: .5;
 }
 
 

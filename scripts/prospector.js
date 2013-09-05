@@ -23,7 +23,7 @@ var sieve, pickActivity;
 // Misc
 var deviceType;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
-var fileArea, fileBox, fileEdit, docList, editState, currentDirectory, currentDirectoryDisplay;
+var fileArea, fileBox, docList, editState, currentDirectory, currentDirectoryDisplay;
 var folderTree, isInitialized;
 prospector.initialized = new CustomEvent('prospector.initialized');
 
@@ -67,10 +67,12 @@ prospector.init = function () {
   checkDevice();
   
   // Select important elements
-  fileArea = document.getElementById('file-area')
+  fileArea = document.getElementById('file-area');
   fileBox = document.getElementById('file-box');
   currentDirectory = document.getElementById('current-directory');
   if (sieve != true) {
+    // Select Prospector-only elements
+    docList = document.querySelectorAll('[data-type="list"]');
     currentDirectoryDisplay = document.getElementById('current-directory-display');
   }
   
@@ -81,11 +83,11 @@ prospector.init = function () {
       nav('welcome');
     
       // Open root
-      prospector.openDirectory('/');
+      prospector.openDirectory('/', 'none');
       
       // Add listener
       storage.onchange = function (change) {
-        prospector.openDirectory(currentDirectory.textContent);
+        prospector.openDirectory(currentDirectory.textContent, 'none');
       }
       
       // Dispatch initialized event
@@ -97,47 +99,58 @@ prospector.init = function () {
     }
   });
   
-  // Add event listeners
-  fileArea.addEventListener(
-    'contextmenu', function contextmenu(event) {
-      editDocs();
-    }
-  );
+  if (sieve != true) {
+    // Add event listeners
+    fileArea.addEventListener(
+      'contextmenu', function contextmenu(event) {
+        editMode();
+      }
+    );
+  }
 };
 
-function editDocs() {
-  fileArea = document.getElementById('file-area'),
-  fileEdit = document.getElementById('edit-mode'),
-  docList = document.querySelectorAll('[data-type="list"]');
+
+/* Edit Mode
+------------------------*/
+function editMode() {
   if (editState == true) {
     editState = false;
-    fileEdit.className="";
-    fileArea.style.display = 'block';
+    prospector.openDirectory(currentDirectory.textContent, 'none');
+    navBack();
+    document.querySelector('#welcome [role="main"]').classList.remove('edit-mode');
   } else {
-    fileEdit.className="current";
-    for(var i=0; i<docList.length; i++){
-      docList[i].className="danger";
-    }
-    fileArea.style.display = 'block';
     editState = true;
+    prospector.openDirectory(currentDirectory.textContent, 'none');
+    nav('edit-mode');
+    document.querySelector('#welcome [role="main"]').classList.add('edit-mode');
   }
 }
 
+
 /* File lists
 ------------------------*/
-prospector.openDirectory = function (directory, backwards) {
+prospector.openDirectory = function (directory, animation) {
+  var fileList;
+
   // Generate file list
   io.enumerate((directory), function(FILES) {
-    if (backwards == true) {
-      prospector.buildFileList(FILES, [fileArea.firstElementChild], 'Files Found');
-      
-      // Animation!
+    // Select file list
+    if (animation == 'none') {
+      fileList = fileArea.children[1];    
+    } else if (animation == 'reverse') {
+      fileList = fileArea.firstElementChild;
+    } else {
+      fileList = fileArea.lastElementChild;
+    }
+    
+    // Build file list
+    prospector.buildFileList(FILES, [fileList], 'Files Found');
+    
+    // Animate
+    if (animation == 'reverse') {
       var removedNode = fileArea.removeChild(fileArea.lastElementChild);
       fileArea.insertBefore(removedNode, fileArea.children[0]);
-    } else {
-      prospector.buildFileList(FILES, [fileArea.lastElementChild], 'Files Found');
-      
-      // Animation!
+    } else if (animation != 'none') {
       var removedNode = fileArea.removeChild(fileArea.firstElementChild);
       fileArea.appendChild(removedNode);
     }
@@ -179,10 +192,16 @@ prospector.buildFileList = function (FILES, listElms, display) {
   if (listElms && FILES) {
     var output = '<ul>';  
   
-    // Make sure list is not an edit list
+    // Make sure list is the right type of list
     for (var i = 0; i < listElms.length; i++) {
-      if (listElms[i].getAttribute('data-type') != 'list') {
-        listElms[i].setAttribute('data-type', 'list');
+      if (editState == true) {
+        if (listElms[i].getAttribute('data-edit') != 'true') {
+          listElms[i].setAttribute('data-edit', 'true');
+        }      
+      } else {
+        if (listElms[i].getAttribute('data-edit') != 'false') {
+          listElms[i].setAttribute('data-edit', 'false');
+        }
       }
     }
         
@@ -208,6 +227,7 @@ prospector.buildFileList = function (FILES, listElms, display) {
 
 function fileItem(directory, name, type, mime) {
   var output = '', shownDirectory, shownType, iconGroup, icon;
+  
   if (directory && name && type) {
     // Display refinements
     if (directory.charAt(0) == '/') {
@@ -226,26 +246,42 @@ function fileItem(directory, name, type, mime) {
     }
     
     // Generate item
-    if (sieve == true) {
-      output = '<li class="file-list-item" data-click="sieve-select" data-click-directory="'+directory+'" data-click-name="'+name+'" data-click-extension="'+type+'" data-click-mime="'+mime+'">';
+    if (editState == true) {
+      output = '<li class="file-list-item" data-click="select" data-click-directory="'+directory+'" data-click-name="'+name+'" data-click-extension="'+type+'" data-click-mime="'+mime+'">';
+      output += '<label class="danger"><input type="checkbox" class="edit-selected"/><span></span></label>';
       output += '<a href="#">';
       output += '<div class="file-item-info">';
-      if (type != 'folder') {
-        output += '<aside class="pack-end"><input type="checkbox" /></aside>';
+      if (icon) {
+        output += '<aside class="file-item-icon" data-icon="'+icon+'"></aside>';
       }
+      output += '<p class="file-item-name">'+name+shownType+'</p>'; 
+      output += '<p class="file-item-type">'+shownDirectory+name+shownType+'</p>';
+      output += '</div>'; 
+      output += '</a></li>';  
+    
     } else {
-      output = '<li class="file-list-item" data-click="open" data-click-directory="'+directory+'" data-click-name="'+name+'" data-click-extension="'+type+'" data-click-mime="'+mime+'">';
-      output += '<a href="#">';
-      output += '<div class="file-item-info">';
+      if (sieve == true) {
+        output = '<li class="file-list-item" data-click="sieve-select" data-click-directory="'+directory+'" data-click-name="'+name+'" data-click-extension="'+type+'" data-click-mime="'+mime+'">';
+        output += '<a href="#">';
+        output += '<div class="file-item-info">';
+        if (type != 'folder') {
+          output += '<aside class="pack-end"><input type="checkbox" /></aside>';
+        }
+      } else {
+        output = '<li class="file-list-item" data-click="open" data-click-directory="'+directory+'" data-click-name="'+name+'" data-click-extension="'+type+'" data-click-mime="'+mime+'">';
+        output += '<a href="#">';
+        output += '<div class="file-item-info">';
+      }
+      if (icon) {
+        output += '<aside class="file-item-icon" data-icon="'+icon+'"></aside>';
+      }
+      output += '<p class="file-item-name">'+name+shownType+'</p>'; 
+      output += '<p class="file-item-type">'+shownDirectory+name+shownType+'</p>';
+      output += '</div>'; 
+      output += '</a></li>';  
     }
-    if (icon) {
-      output += '<aside class="file-item-icon" data-icon="'+icon+'"></aside>';
-    }
-    output += '<p class="file-item-name">'+name+shownType+'</p>'; 
-    output += '<p class="file-item-type">'+shownDirectory+name+shownType+'</p>';
-    output += '</div>'; 
-    output += '</a></li>';  
   }
+  
   return output;
 }
 
@@ -358,8 +394,11 @@ function processActions(eventAttribute, target) {
         }
               
         // Open parent folder
-        prospector.openDirectory(tempDir, true);
+        prospector.openDirectory(tempDir, 'reverse');
       }
+    } else if (calledFunction == 'back') {
+      // Navigate to the previous region
+      navBack();
     } else if (calledFunction == 'close') {
       // Clear file box
       fileBox.innerHTML = '<span style="color: red;">Not supported...</span>';
@@ -367,17 +406,24 @@ function processActions(eventAttribute, target) {
       fileBox.setAttribute('data-file-type', '');
       document.getElementById('current-file-display').textContent = 'No file open';
       navBack();
-    } else if (calledFunction == 'sieve-select') {
+    } else if (calledFunction == 'edit-mode') {
+      // Change the edit mode
+      editMode();
+    } else if (sieve == true && calledFunction == 'sieve-select') {
       // Special folder action
       if (target.getAttribute(eventAttribute+'-extension') == 'folder') {
         prospector.openDirectory(target.getAttribute(eventAttribute+'-directory') + target.getAttribute(eventAttribute+'-name'));
       } else {
         // Select item (TBD)
         // Close Sieve
-        pickActivity.postResult(target.getAttribute(eventAttribute+'-directory') + target.getAttribute(eventAttribute+'-name') + target.getAttribute(eventAttribute+'-extension'));
+        var result = (target.getAttribute(eventAttribute+'-directory') + target.getAttribute(eventAttribute+'-name') + target.getAttribute(eventAttribute+'-extension'));
+        if (result != '/') {
+          result = ('/'+result);
+        }
+        pickActivity.postResult(result);
         pickActivity = null;
       }
-    } else if (calledFunction == 'sieve-back') {
+    } else if (sieve == true && calledFunction == 'sieve-previous') {
       if (folderTree != '/') {
         // Take out current folder
         var tempDir = folderTree.substring(0, folderTree.lastIndexOf('/'));
@@ -389,7 +435,7 @@ function processActions(eventAttribute, target) {
         prospector.openDirectory(tempDir, true);
       } else {
         // Close Sieve
-        pickActivity.postResult(null);
+        pickActivity.postResult('ActivityCanceled');
         pickActivity = null;
       }
     }
