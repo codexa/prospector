@@ -176,6 +176,8 @@ form[role=dialog].current {
   bottom: 0px;
   left: 0px;
   right: 0px;
+  opacity: 1;
+  pointer-events: auto;
   transform: none;
     -moz-transform: none;
     -webkit-transform: none;
@@ -187,7 +189,7 @@ form[role=dialog].current {
     -o-transition: all .4s ease;
 }
 
-.file-area > article:first-child {
+.file-area > article[data-type="list"]:first-child {
   transform: translateX(-100%);
     -moz-transform: translateX(-100%);
     -webkit-transform: translateX(-100%);
@@ -195,12 +197,32 @@ form[role=dialog].current {
     -ms-transform: translateX(-100%); 
 }
 
-.file-area > article:last-child {
+.file-area > article[data-type="list"]:last-child {
   transform: translateX(100%);
     -moz-transform: translateX(100%);
     -webkit-transform: translateX(100%);
     -o-transform: translateX(100%); 
     -ms-transform: translateX(100%); 
+}
+
+.file-area > article[data-type="grid"]:first-child {
+  transform: scale(3, 3);
+    -moz-transform: scale(3, 3);
+    -webkit-transform: scale(3, 3);
+    -o-transform: scale(3, 3);
+    -ms-transform: scale(3, 3);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.file-area > article[data-type="grid"]:last-child {
+  transform: scale(.3, .3);
+    -moz-transform: scale(.3, .3);
+    -webkit-transform: scale(.3, .3);
+    -o-transform: scale(.3, .3);
+    -ms-transform: scale(.3, .3);
+  opacity: 0;
+  pointer-events: none;
 }
 
 

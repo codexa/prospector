@@ -1,0 +1,130 @@
+/* ----------------------------------
+ * Grids
+ * ---------------------------------- */
+
+[data-type="grid"] {
+  font-family: "MozTT", "Moz", Sans-serif;
+  font-weight: 400;
+  text-align: center;
+}
+
+[data-type="grid"] ul {
+  list-style: none;
+  display: block;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  overflow: hidden;
+  column-gap: 0;
+    -moz-column-gap: 0;
+}
+
+@media (min-width: 1100px) {
+  [data-type="grid"] ul {
+    column-count: 6;
+      -moz-column-count: 6;
+  }
+}
+
+@media (max-width: 1100px) {
+  [data-type="grid"] ul {
+    column-count: 5;
+      -moz-column-count: 5;
+  }
+}
+
+@media (max-width: 900px) {
+  [data-type="grid"] ul {
+    column-count: 4;
+      -moz-column-count: 4;
+  }
+}
+
+@media (max-width: 700px) {
+  [data-type="grid"] ul {
+    column-count: 3;
+      -moz-column-count: 3;
+  }
+}
+
+@media (max-width: 500px) {
+  [data-type="grid"] ul {
+    column-count: 2;
+      -moz-column-count: 2;
+  }
+}
+
+@media (max-width: 300px) {
+  [data-type="grid"] ul {
+    column-count: 1;
+      -moz-column-count: 1;
+  }
+}
+
+[data-type="grid"] strong {
+  font-weight: 500;
+}
+
+/* Title divisors */
+[data-type="grid"] header {
+  border-bottom: 0.1rem solid #aeaeae;
+  padding: 0.5rem 1rem;
+  margin: 0;
+  font-size: 1.6rem;
+  line-height: 1.8rem;
+  font-weight: normal;
+  color: #ff4E00;
+  text-transform: uppercase;
+}
+
+
+/* Grid items */
+[data-type="grid"] li {
+  height: 15rem;
+  width: 100% !important;
+  box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box; 
+  border-bottom: solid 1px #aeaeae; 
+  border-right: solid 1px #aeaeae; 
+  background: #dfdfdf;
+  color: #2c2c2c;
+  margin: 0;
+  display: inline-block;
+}
+
+
+/* File grid items */
+[data-type="grid"] li.file-list-item a {
+  padding: 0;
+  margin: 0;
+  height: auto;
+  text-decoration: none;
+  color: black;
+}
+
+[data-type="grid"] li.file-list-item > a > p,
+[data-type="grid"] li.file-list-item > a > div {
+  padding: .5rem 2rem;
+}
+
+[data-type="grid"] li.file-list-item .file-item-name {
+  font-size: 2rem;
+  color: #2c2c2c;
+  font-weight: bold;
+  margin: 1rem 0 0;
+  overflow: hidden;
+  max-width: 100%;
+  display: block;
+  text-overflow: ellipsis;
+}
+
+[data-type="grid"] li.file-list-item .file-item-type {
+  display: none;
+}
+
+[data-type="grid"] li aside.file-item-icon {
+  height: 10rem;
+  width: 100%;
+  background-size: contain;
+}
