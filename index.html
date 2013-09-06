@@ -34,6 +34,10 @@
   <section role="region" id="welcome" class="current">
     <header>
       <button data-click="previous" id="back-button" class="disabled"><span class="icon" data-icon="back">&lt;</span></button>
+      <menu type="toolbar">
+       <button data-click="grid" id="grid-button" class="active"><span class="icon" data-icon="grid">Grid</span></button>
+       <button data-click="list" id="list-button"><span class="icon" data-icon="list">List</span></button>
+      </menu>
       <h1 class="center" id="current-directory-display">Prospector</h1>
     </header>
     <div role="edit" data-type="edit" id="edit-mode">
@@ -51,10 +55,10 @@
       </menu>
     </div>
     <div role="main" class="header-only">
-      <div id="file-area" class="file-area">
-        <article data-type="grid" class="js-masonry" data-masonry-options='{ "columnWidth": 200, "itemSelector": ".item" }'></article>
-        <article data-type="grid" class="js-masonry" data-masonry-options='{ "columnWidth": 200, "itemSelector": ".item" }'></article>
-        <article data-type="grid" class="js-masonry" data-masonry-options='{ "columnWidth": 200, "itemSelector": ".item" }'></article>
+      <div id="file-area" class="file-area" data-type="grid">
+        <article></article>
+        <article></article>
+        <article></article>
       </div>
     </div>
   </section>

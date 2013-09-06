@@ -9,6 +9,14 @@
   background-size: 1.8rem !important;
 }
 
+[data-icon="grid"] {
+  background-image: url(../img/misc/grid.svg);
+}
+
+[data-icon="list"] {
+  background-image: url(../img/misc/list.svg);
+}
+
 
 /* File Icons */
 .file-item-icon {

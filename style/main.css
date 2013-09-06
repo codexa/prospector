@@ -23,12 +23,8 @@ html, body {
 }
 
 section > header:first-child h1.center {
-  vertical-align: middle;
   text-align: center !important;
-  max-width: calc(100% - 5rem);
-    max-width: -moz-calc(100% - 5rem);
-    max-width: -webkit-calc(100% - 5rem);
-  margin: 0 auto;
+  margin: 0 0 0 3rem;
 }
 
 [role="main"].header-only {
@@ -177,6 +173,8 @@ form[role=dialog].current {
   left: 0px;
   right: 0px;
   opacity: 1;
+  z-index: 1;
+  background: #eee;
   pointer-events: auto;
   transform: none;
     -moz-transform: none;
@@ -189,23 +187,23 @@ form[role=dialog].current {
     -o-transition: all .4s ease;
 }
 
-.file-area > article[data-type="list"]:first-child {
+.file-area[data-type="list"] > article:first-child {
   transform: translateX(-100%);
     -moz-transform: translateX(-100%);
     -webkit-transform: translateX(-100%);
     -o-transform: translateX(-100%); 
-    -ms-transform: translateX(-100%); 
+    -ms-transform: translateX(-100%);
 }
 
-.file-area > article[data-type="list"]:last-child {
+.file-area[data-type="list"] > article:last-child {
   transform: translateX(100%);
     -moz-transform: translateX(100%);
     -webkit-transform: translateX(100%);
     -o-transform: translateX(100%); 
-    -ms-transform: translateX(100%); 
+    -ms-transform: translateX(100%);
 }
 
-.file-area > article[data-type="grid"]:first-child {
+.file-area[data-type="grid"] > article:first-child {
   transform: scale(3, 3);
     -moz-transform: scale(3, 3);
     -webkit-transform: scale(3, 3);
@@ -213,9 +211,10 @@ form[role=dialog].current {
     -ms-transform: scale(3, 3);
   opacity: 0;
   pointer-events: none;
+  z-index: 2;
 }
 
-.file-area > article[data-type="grid"]:last-child {
+.file-area[data-type="grid"] > article:last-child {
   transform: scale(.3, .3);
     -moz-transform: scale(.3, .3);
     -webkit-transform: scale(.3, .3);
@@ -223,6 +222,7 @@ form[role=dialog].current {
     -ms-transform: scale(.3, .3);
   opacity: 0;
   pointer-events: none;
+  z-index: 0;
 }
 
 

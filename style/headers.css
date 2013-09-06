@@ -21,7 +21,8 @@ section > header:first-child h1 {
   display: block;
   overflow: hidden;
   margin: 0;
-  height: 100%
+  padding-top: 2px;
+  height: 100%;
 }
 
 section > header:first-child h1 em {
@@ -139,6 +140,18 @@ section > header:first-child menu[type="toolbar"] button:not(:disabled):active  
     -moz-transition: background 0.2s ease;
     -webkit-transition: background 0.2s ease;
     -o-transition: background 0.2s ease;
+}
+
+section > header:first-child a:not([aria-disabled="true"]).active .icon:after,
+section > header:first-child button:not(:disabled).active .icon:after,
+section > header:first-child menu[type="toolbar"] a.active:not([aria-disabled="true"]),
+section > header:first-child menu[type="toolbar"] button.active:not(:disabled)  {
+  background: #dfdfdf !important;
+  border-bottom: .2rem solid #aeaeae;
+  transition: background 0.5s ease;
+    -moz-transition: background 0.5s ease;
+    -webkit-transition: background 0.5s ease;
+    -o-transition: background 0.5s ease;
 }
 
 /* Disabled state */

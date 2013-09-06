@@ -105,26 +105,39 @@
 
 [data-type="grid"] li.file-list-item > a > p,
 [data-type="grid"] li.file-list-item > a > div {
-  padding: .5rem 2rem;
+  padding: 1rem 2rem;
 }
 
 [data-type="grid"] li.file-list-item .file-item-name {
-  font-size: 2rem;
+  font-size: 1.8rem;
   color: #2c2c2c;
   font-weight: bold;
   margin: 1rem 0 0;
-  overflow: hidden;
   max-width: 100%;
   display: block;
+  white-space: nowrap;
   text-overflow: ellipsis;
+  display: block;
+  overflow: hidden;
 }
 
-[data-type="grid"] li.file-list-item .file-item-type {
+[data-type="grid"] li.file-list-item .file-item-extension {
+  font-size: 1.4rem;
+  color: #2c2c2c;
+  max-width: 100%;
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+  overflow: hidden;
+}
+
+[data-type="grid"] li.file-list-item .file-item-path {
   display: none;
 }
 
 [data-type="grid"] li aside.file-item-icon {
-  height: 10rem;
+  height: 8rem;
   width: 100%;
   background-size: contain;
 }

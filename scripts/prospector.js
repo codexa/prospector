@@ -242,6 +242,7 @@ function fileItem(directory, name, type, mime) {
       icon = 'folder';
       shownType = '';
     } else {
+      icon = 'file';
       shownType = type;
     }
     
@@ -255,7 +256,7 @@ function fileItem(directory, name, type, mime) {
         output += '<aside class="file-item-icon" data-icon="'+icon+'"></aside>';
       }
       output += '<p class="file-item-name">'+name+shownType+'</p>'; 
-      output += '<p class="file-item-type">'+shownDirectory+name+shownType+'</p>';
+      output += '<p class="file-item-path">'+shownDirectory+name+shownType+'</p>';
       output += '</div>'; 
       output += '</a></li>';  
     
@@ -275,8 +276,9 @@ function fileItem(directory, name, type, mime) {
       if (icon) {
         output += '<aside class="file-item-icon" data-icon="'+icon+'"></aside>';
       }
-      output += '<p class="file-item-name">'+name+shownType+'</p>'; 
-      output += '<p class="file-item-type">'+shownDirectory+name+shownType+'</p>';
+      output += '<p><span class="file-item-name">'+name+'</span>';
+      output += '<span class="file-item-extension">'+shownType+'</span></p>'; 
+      output += '<p class="file-item-path">'+shownDirectory+name+shownType+'</p>';
       output += '</div>'; 
       output += '</a></li>';  
     }
@@ -409,6 +411,16 @@ function processActions(eventAttribute, target) {
     } else if (calledFunction == 'edit-mode') {
       // Change the edit mode
       editMode();
+    } else if (calledFunction == 'grid') {
+      // Change to grid display
+      fileArea.setAttribute('data-type', 'grid');
+      document.getElementById('grid-button').classList.add('active');
+      document.getElementById('list-button').classList.remove('active');
+    } else if (calledFunction == 'list') {
+      // Change to list display
+      fileArea.setAttribute('data-type', 'list');
+      document.getElementById('list-button').classList.add('active');
+      document.getElementById('grid-button').classList.remove('active');
     } else if (sieve == true && calledFunction == 'sieve-select') {
       // Special folder action
       if (target.getAttribute(eventAttribute+'-extension') == 'folder') {
@@ -432,7 +444,7 @@ function processActions(eventAttribute, target) {
         }
               
         // Open parent folder
-        prospector.openDirectory(tempDir, true);
+        prospector.openDirectory(tempDir, 'reverse');
       } else {
         // Close Sieve
         pickActivity.postResult('ActivityCanceled');

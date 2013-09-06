@@ -33,13 +33,17 @@
   <section role="region" id="welcome" class="current">
     <header>
       <button data-click="sieve-previous" id="back-button"><span class="icon" data-icon="close">&lt;</span></button>
+      <menu type="toolbar">
+       <button data-click="grid" id="grid-button"><span class="icon" data-icon="grid">Grid</span></button>
+       <button data-click="list" id="list-button" class="active"><span class="icon" data-icon="list">List</span></button>
+      </menu>
       <h1 class="center">Pick a File</h1>
     </header>
     <div role="main" class="header-only">
-      <div id="file-area" class="file-area">
-        <article data-type="list"></article>
-        <article data-type="list"></article>
-        <article data-type="list"></article>
+      <div id="file-area" class="file-area" data-type="list">
+        <article></article>
+        <article></article>
+        <article></article>
       </div>
     </div>
   </section>
