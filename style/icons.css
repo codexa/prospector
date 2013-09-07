@@ -17,6 +17,10 @@
   background-image: url(../img/misc/list.svg);
 }
 
+[data-icon="checkmark"] {
+  background-image: url(../img/misc/checkmark.svg);
+}
+
 
 /* File Icons */
 .file-item-icon {

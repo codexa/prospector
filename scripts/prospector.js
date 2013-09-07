@@ -18,7 +18,7 @@ var prospector = {};
 prospector.files = {};
 
 // Sieve
-var sieve, pickActivity;
+var sieve, pickActivity, multiple, filter = [], sieveSelection = [];
 
 // Misc
 var deviceType;
@@ -170,21 +170,11 @@ prospector.openDirectory = function (directory, animation) {
   // Add to folderTree
   folderTree = directory;
   
-  // Different actions for Prospector and Sieve
-  if (sieve == true) {
-    // Change function of back button
-    if (folderTree != '/') {
-      document.querySelector('#back-button .icon').setAttribute('data-icon', 'back');
-    } else {
-      document.querySelector('#back-button .icon').setAttribute('data-icon', 'close');  
-    }
+  // Enable/disable back button
+  if (folderTree != '/') {
+    document.getElementById('back-button').classList.remove('disabled');
   } else {
-    // Enable/disable back button
-    if (folderTree != '/') {
-      document.getElementById('back-button').classList.remove('disabled');
-    } else {
-      document.getElementById('back-button').classList.add('disabled');  
-    }
+    document.getElementById('back-button').classList.add('disabled');  
   }
 };
 
@@ -265,9 +255,6 @@ function fileItem(directory, name, type, mime) {
         output = '<li class="file-list-item" data-click="sieve-select" data-click-directory="'+directory+'" data-click-name="'+name+'" data-click-extension="'+type+'" data-click-mime="'+mime+'">';
         output += '<a href="#">';
         output += '<div class="file-item-info">';
-        if (type != 'folder') {
-          output += '<aside class="pack-end"><input type="checkbox" /></aside>';
-        }
       } else {
         output = '<li class="file-list-item" data-click="open" data-click-directory="'+directory+'" data-click-name="'+name+'" data-click-extension="'+type+'" data-click-mime="'+mime+'">';
         output += '<a href="#">';
@@ -329,6 +316,7 @@ navigator.mozSetMessageHandler('activity', function(activityRequest) {
     } else if (activity.name === "pick") {
       // Sieve
       pickActivity = activityRequest;
+      multiple = activity.data.multiple;
     }
   });
   if (isInitialized == true && sieve != true) {
@@ -426,29 +414,70 @@ function processActions(eventAttribute, target) {
       if (target.getAttribute(eventAttribute+'-extension') == 'folder') {
         prospector.openDirectory(target.getAttribute(eventAttribute+'-directory') + target.getAttribute(eventAttribute+'-name'));
       } else {
-        // Select item (TBD)
-        // Close Sieve
-        var result = (target.getAttribute(eventAttribute+'-directory') + target.getAttribute(eventAttribute+'-name') + target.getAttribute(eventAttribute+'-extension'));
-        if (result != '/') {
-          result = ('/'+result);
+        // Get URI     
+        var selection = (target.getAttribute(eventAttribute+'-directory') + target.getAttribute(eventAttribute+'-name') + target.getAttribute(eventAttribute+'-extension'));
+        if (selection != '/') {
+          selection = ('/'+selection);
         }
-        pickActivity.postResult(result);
-        pickActivity = null;
+        
+        if (target.classList.contains('selected')) {
+          // Deselect item
+          target.classList.remove('selected');
+          
+          // Remove from sieveSelection
+          for (var i = 0; i < sieveSelection.length; i++) {
+            if (sieveSelection[i] == selection) {
+	          sieveSelection.splice(i, 1);
+	          break;
+	        }
+          }
+        } else {
+          // If single file select, then remove other selections
+          if (multiple != true) {
+            sieveSelection = [];
+            if (document.querySelector('.selected')) {
+              document.querySelector('.selected').classList.remove('selected');
+            }
+          }
+        
+          // Select item   
+          target.classList.add('selected');
+          
+          // Remove duplicates
+          for (var i = 0; i < sieveSelection.length; i++) {
+            if (sieveSelection[i] == selection) {
+	          sieveSelection.splice(i, 1);
+	          break;
+	        }
+          }
+        
+          // Add to sieveSelection
+          sieveSelection.push(selection);
+        }
+        
+        // Toggle done/cancel button
+        if (sieveSelection.length > 0) {
+          document.querySelector('#done-button .icon').setAttribute('data-icon', 'checkmark');
+        } else {
+          document.querySelector('#done-button .icon').setAttribute('data-icon', 'close');        
+        }
       }
-    } else if (sieve == true && calledFunction == 'sieve-previous') {
-      if (folderTree != '/') {
-        // Take out current folder
-        var tempDir = folderTree.substring(0, folderTree.lastIndexOf('/'));
-        if (!tempDir | tempDir == '') {
-          tempDir = '/';
+    } else if (sieve == true && calledFunction == 'sieve-done') {
+      if (sieveSelection && sieveSelection != '') {
+        // Convert to string if multiple != true
+        if (multiple != true) {
+          sieveSelection = sieveSelection.toString();
         }
-              
-        // Open parent folder
-        prospector.openDirectory(tempDir, 'reverse');
+      
+        // Return selection
+        pickActivity.postResult(sieveSelection);
+        pickActivity = null; 
+        sieveSelection = [];
       } else {
         // Close Sieve
         pickActivity.postResult('ActivityCanceled');
         pickActivity = null;
+        sieveSelection = [];
       }
     }
   }

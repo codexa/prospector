@@ -88,6 +88,9 @@
         },
         "type": {
           "required": false
+        },
+        "multiple": {
+          "required": false
         }
       },
       "returnValue": true

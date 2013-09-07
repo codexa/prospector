@@ -156,6 +156,19 @@ form[role=dialog].current {
   top: -.4rem;
 }
 
+[data-type="list"] li,
+[data-type="grid"] li {
+  transition: background .3s ease;
+    -moz-transition: background .3s ease;
+    -webkit-transition: background .3s ease;
+    -o-transition: background .3s ease;
+}
+
+[data-type="list"] li.selected,
+[data-type="grid"] li.selected {
+  background: #ffc503;
+}
+
 .file-area {
   height: 100%;
   width: 100%;
