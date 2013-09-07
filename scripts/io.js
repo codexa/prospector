@@ -161,28 +161,25 @@ io.enumerate = function (directory, callback) {
 
 /* File IO
 ------------------------*/
-io.delete = function (name, location) {
+io.delete = function (name, callback) {
   var path = name;
-  if (!location | location == '' | location == 'internal') {
-    if (deviceAPI == 'deviceStorage') {
-      var req = storage.delete(path);
-      req.onsuccess = function () {
-        // Code to show a deleted banner
-      }
-      req.onerror = function () {
-        // Code to show an error banner (the alert is temporary)
-        alert('Delete unsuccessful :(\n\nInfo for gurus:\n"' + this.error.name + '"');
-      }
+  if (deviceAPI == 'deviceStorage') {
+    var req = storage.delete(path);
+    req.onsuccess = function () {
+      callback();
+    }
+    req.onerror = function () {
+      callback(this.error.name);
     }
   }
 };
 
-io.rename = function (directory, name, type, newname, location) {
+io.rename = function (directory, name, type, newname, newtype) {
   io.load(directory, name, type, function(result) {
     var fullName = (directory + name + type);
-    io.save(directory, name, type, result, function(){}, location);
-    io.delete(fullName, location);
-  }, location);
+    io.save(directory, newname, newtype, result, function(){});
+    io.delete(fullName);
+  });
 };
 
 io.load = function (directory, filename, filetype, callback) {

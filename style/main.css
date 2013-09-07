@@ -35,9 +35,9 @@ section > header:first-child h1.center {
 }
 
 [role="main"].edit-mode {
-  height: calc(100% - 12rem);
-    height: -moz-calc(100% - 12rem);
-    height: -webkit-calc(100% - 12rem);
+  height: calc(100% - 11.9rem);
+    height: -moz-calc(100% - 11.9rem);
+    height: -webkit-calc(100% - 11.9rem);
   overflow: scroll;
 }
 

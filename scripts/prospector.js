@@ -23,7 +23,8 @@ var sieve, pickActivity, path, multiple, filter = [], sieveSelection = [];
 // Misc
 var deviceType;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
-var fileArea, fileBox, docList, editState, currentDirectory, currentDirectoryDisplay;
+var fileArea, fileBox, docList, currentDirectory, currentDirectoryDisplay;
+var editState, editSelection = [];
 var folderTree, isInitialized;
 prospector.initialized = new CustomEvent('prospector.initialized');
 
@@ -115,6 +116,7 @@ prospector.init = function () {
 function editMode() {
   if (editState == true) {
     editState = false;
+    editSelection = [];
     prospector.openDirectory(currentDirectory.textContent, 'none');
     navBack();
     document.querySelector('#welcome [role="main"]').classList.remove('edit-mode');
@@ -243,13 +245,12 @@ function fileItem(directory, name, type, mime) {
     // Generate item
     if (editState == true) {
       output = '<li class="file-list-item" data-click="select" data-click-directory="'+directory+'" data-click-name="'+name+'" data-click-extension="'+type+'" data-click-mime="'+mime+'">';
-      output += '<label class="danger"><input type="checkbox" class="edit-selected"/><span></span></label>';
       output += '<a href="#">';
       output += '<div class="file-item-info">';
       if (icon) {
         output += '<aside class="file-item-icon" data-icon="'+icon+'"></aside>';
       }
-      output += '<p class="file-item-name">'+name+shownType+'</p>'; 
+      output += '<input type="text" class="file-item-name" value="'+name+shownType+'" />'; 
       output += '<p class="file-item-path">'+shownDirectory+name+shownType+'</p>';
       output += '</div>'; 
       output += '</a></li>';  
@@ -407,6 +408,36 @@ function processActions(eventAttribute, target) {
     } else if (calledFunction == 'edit-mode') {
       // Change the edit mode
       editMode();
+    } else if (calledFunction == 'select') {
+	  // Get URI     
+	  var selection = (target.getAttribute(eventAttribute+'-directory') + target.getAttribute(eventAttribute+'-name') + target.getAttribute(eventAttribute+'-extension'));
+	
+	  if (target.classList.contains('selected')) {
+	    // Deselect item
+	    target.classList.remove('selected');
+	  
+	    // Remove from selection
+	    for (var i = 0; i < editSelection.length; i++) {
+	   	  if (editSelection[i] == selection) {
+	  	    editSelection.splice(i, 1);
+		    break;
+		  }
+	    }
+	  } else {	
+	    // Select item   
+	    target.classList.add('selected');
+	  
+	    // Remove duplicates
+	    for (var i = 0; i < editSelection.length; i++) {
+		  if (editSelection[i] == selection) {
+		    editSelection.splice(i, 1);
+		    break;
+		  }
+	    }
+	
+	    // Add to selection
+	    editSelection.push(selection);
+	  }
     } else if (calledFunction == 'grid') {
       // Change to grid display
       fileArea.setAttribute('data-type', 'grid');
@@ -417,6 +448,36 @@ function processActions(eventAttribute, target) {
       fileArea.setAttribute('data-type', 'list');
       document.getElementById('list-button').classList.add('active');
       document.getElementById('grid-button').classList.remove('active');
+    } else if (calledFunction == 'delete') {
+      if (editSelection.length > 0) {
+        // Confirm
+        if (editSelection.length == 1) {
+          var confirmDeletion = confirm('Do you want to delete this file?');
+        } else {
+          var confirmDeletion = confirm('Do you want to delete these files?');      
+        }
+        if (confirmDeletion == true) {
+          // Delete files
+          for (var i = 0; i < editSelection.length; i++) {
+            io.delete(editSelection[i], function (error) {
+              if (!error) {
+                // Refresh
+                prospector.openDirectory(currentDirectory.textContent, 'none');                
+              } else {
+                alert('There was an error in deleting '+editSelection[i]+'\n\nInfo:\n'+error);
+              }
+            });
+          }
+          
+          // Empty selection
+          editSelection = [];
+        } else {
+          // Cancel
+          return;
+        }        
+      } else {
+        alert('No files are selected.');
+      }
     } else if (sieve == true && calledFunction == 'sieve-select') {
       // Special folder action
       if (target.getAttribute(eventAttribute+'-extension') == 'folder') {
@@ -424,10 +485,7 @@ function processActions(eventAttribute, target) {
       } else {
         // Get URI     
         var selection = (target.getAttribute(eventAttribute+'-directory') + target.getAttribute(eventAttribute+'-name') + target.getAttribute(eventAttribute+'-extension'));
-        if (selection != '/') {
-          selection = ('/'+selection);
-        }
-        
+
         if (target.classList.contains('selected')) {
           // Deselect item
           target.classList.remove('selected');
