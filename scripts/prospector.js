@@ -18,7 +18,7 @@ var prospector = {};
 prospector.files = {};
 
 // Sieve
-var sieve, pickActivity, multiple, filter = [], sieveSelection = [];
+var sieve, pickActivity, path, multiple, filter = [], sieveSelection = [];
 
 // Misc
 var deviceType;
@@ -169,9 +169,13 @@ prospector.openDirectory = function (directory, animation) {
   
   // Add to folderTree
   folderTree = directory;
+  if (sieve == true && path) {
+    var pathRegExp = new RegExp(path);
+    folderTree = folderTree.replace(pathRegExp, '');
+  }
   
   // Enable/disable back button
-  if (folderTree != '/') {
+  if (folderTree.length > 0 && folderTree != '/') {
     document.getElementById('back-button').classList.remove('disabled');
   } else {
     document.getElementById('back-button').classList.add('disabled');  
@@ -317,6 +321,10 @@ navigator.mozSetMessageHandler('activity', function(activityRequest) {
       // Sieve
       pickActivity = activityRequest;
       multiple = activity.data.multiple;
+      if (activity.data.path) {
+        path = activity.data.path;
+        prospector.openDirectory(path);      
+      }
     }
   });
   if (isInitialized == true && sieve != true) {
