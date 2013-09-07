@@ -409,8 +409,12 @@ function processActions(eventAttribute, target) {
       // Change the edit mode
       editMode();
     } else if (calledFunction == 'select') {
-	  // Get URI     
-	  var selection = (target.getAttribute(eventAttribute+'-directory') + target.getAttribute(eventAttribute+'-name') + target.getAttribute(eventAttribute+'-extension'));
+	  // Get URI
+	  if (target.getAttribute(eventAttribute+'-extension') == 'folder') {
+	  	var selection = (target.getAttribute(eventAttribute+'-directory') + target.getAttribute(eventAttribute+'-name'));
+	  } else {
+	    var selection = (target.getAttribute(eventAttribute+'-directory') + target.getAttribute(eventAttribute+'-name') + target.getAttribute(eventAttribute+'-extension'));
+	  }
 	
 	  if (target.classList.contains('selected')) {
 	    // Deselect item
