@@ -166,7 +166,7 @@ form[role=dialog].current {
 
 [data-type="list"] li.selected,
 [data-type="grid"] li.selected {
-  background: #ffc503;
+  background: #cc2828;
 }
 
 .file-area {
