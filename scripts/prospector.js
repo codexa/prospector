@@ -146,7 +146,7 @@ prospector.openDirectory = function (directory, animation) {
     }
     
     // Build file list
-    prospector.buildFileList(FILES, [fileList], 'Files Found');
+    prospector.buildFileList(FILES, [fileList], 'No files found, does this directory even exist?');
     
     // Animate
     if (animation == 'reverse') {
@@ -209,9 +209,7 @@ prospector.buildFileList = function (FILES, listElms, display) {
       }
     } else {
       // No docs message
-      output = '<ul><li style="margin-top: 1rem;" class="noLink">';
-      output += '<p>No ' + display + '</p>';
-      output += '</li></ul>';      
+      output = '<p style="text-align: center; font-size: 1.8rem; padding: 1rem;">' + display + '</p>';
     }
     
     // Display output HTML
@@ -284,25 +282,29 @@ function fileItem(directory, name, type, mime) {
 ------------------------*/
 prospector.open = function (dir, name, type, mime) {
   if (dir && name && type && mime) {
-    // Open with Web Activities
-    var activity = new MozActivity({  
-      // Ask for the "open" activity
-      name: "open",
+  
+    io.load(dir, name, type, function (result) {
+      // Open with Web Activities
+      var activity = new MozActivity({  
+        // Ask for the "open" activity
+        name: "open",
 
-      // Provide the data required by the filters of the activity
-      data: {
-        path: (dir + name + type),
-        type: mime
-      }
+        // Provide the data required by the filters of the activity
+        data: {
+          path: (dir + name + type),
+          blob: result,
+          type: mime
+        }
+      });
+
+      activity.onsuccess = function() {
+        console.log('File has been closed.');
+      };
+
+      activity.onerror = function() {
+        console.log(this.error);
+      };
     });
-
-    activity.onsuccess = function() {
-      console.log('File has been closed.');
-    };
-
-    activity.onerror = function() {
-      console.log(this.error);
-    };
   }
 };
 

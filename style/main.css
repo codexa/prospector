@@ -186,9 +186,9 @@ form[role=dialog].current {
   left: 0px;
   right: 0px;
   opacity: 1;
+  pointer-events: auto;
   z-index: 1;
   background: #eee;
-  pointer-events: auto;
   transform: none;
     -moz-transform: none;
     -webkit-transform: none;
