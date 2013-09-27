@@ -454,14 +454,34 @@ function processActions(eventAttribute, target) {
 	  }
     } else if (calledFunction == 'grid') {
       // Change to grid display
-      fileArea.setAttribute('data-type', 'grid');
-      document.getElementById('grid-button').classList.add('active');
-      document.getElementById('list-button').classList.remove('active');
+      if(document.getElementById("list-button") !== null){
+        var gridy = document.getElementById('list-button');
+        fileArea.setAttribute('data-type', 'grid');
+        gridy.setAttribute("id", "grid-button");
+        gridy.setAttribute("data-click", "grid");
+        gridy.childNodes[0].setAttribute("data-icon", "list");
+      } else {
+        var listy = document.getElementById('grid-button');
+        fileArea.setAttribute('data-type', 'list');
+        listy.setAttribute("id", "list-button");
+        listy.setAttribute("data-click", "list");
+        listy.childNodes[0].setAttribute("data-icon", "grid");
+      }
     } else if (calledFunction == 'list') {
       // Change to list display
-      fileArea.setAttribute('data-type', 'list');
-      document.getElementById('list-button').classList.add('active');
-      document.getElementById('grid-button').classList.remove('active');
+      if(document.getElementById("grid-button") !== null){
+        var listy = document.getElementById('grid-button');
+        fileArea.setAttribute('data-type', 'list');
+        listy.setAttribute("id", "list-button");
+        listy.setAttribute("data-click", "list");
+        listy.childNodes[0].setAttribute("data-icon", "grid");
+      } else {
+        var gridy = document.getElementById('list-button');
+        fileArea.setAttribute('data-type', 'grid');
+        gridy.setAttribute("id", "grid-button");
+        gridy.setAttribute("data-click", "grid");
+        gridy.childNodes[0].setAttribute("data-icon", "list");
+      }
     } else if (calledFunction == 'delete') {
       if (editSelection.length > 0) {
         // Confirm
