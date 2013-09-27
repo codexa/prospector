@@ -397,12 +397,8 @@ aside select.dummy {
 
 
 /* Spinner (Throbber) */
-.spinner {
-  border-radius: 8px;
-  background-color: #eee;
-  padding: 10px;
+.hidden {
   opacity: 0;
-  display: inline-block;
   visibility: hidden;
   transition: opacity .3s, .3s visibility 0s;
     -moz-transition: opacity .3s, .3s visibility 0s;
@@ -411,84 +407,11 @@ aside select.dummy {
   pointer-events: none;
 }
 
-.spinner:hover, .spinner:active, .spinner:focus {
-  opacity: .3 !important;
-}
-
-.spinner.center {
-  position: fixed;
-  left: calc(50% - 53px / 2);
-    left: -moz-calc(50% - 53px / 2);
-    left: -webkit-calc(50% - 53px / 2);
-  top: calc(50% - 53px / 2);
-    top: -moz-calc(50% - 53px / 2);
-    top: -webkit-calc(50% - 53px / 2);
-}
-
-.spinner.shown {
+:not(.hidden) {
   opacity: 1;
   visibility: visible;
   transition: opacity .3s, 0s visibility 0s;
     -moz-transition: opacity .3s, 0s visibility 0s;
     -webkit-transition: opacity .3s, 0s visibility 0s;
     -o-transition: opacity .3s, 0s visibility 0s;
-}
-
-.spinner > div {
-  background-image: url(icons/misc/spinner.png);
-  background-repeat: no-repeat;
-  background-position: center;
-  width: 33px;
-  height: 33px;
-  animation: spin .5s steps(30) infinite;
-    -moz-animation: spin .5s steps(30) infinite;
-    -webkit-animation: spin .5s steps(30) infinite;
-    -o-animation: spin .5s steps(30) infinite;
-}
-
-@keyframes spin{
-  0%{
-    transform: rotate(0turn);
-      -moz-transform: rotate(0turn);
-      -webkit-transform: rotate(0turn);
-      -o-transform: rotate(0turn);
-      -ms-transform: rotate(0turn);
-  }
-  100%{
-    transform: rotate(1turn);
-      -moz-transform: rotate(1turn);
-      -webkit-transform: rotate(1turn);
-      -o-transform: rotate(1turn);
-      -ms-transform: rotate(1turn);
-  }
-}
-@-moz-keyframes spin{
-  0%{
-    transform: rotate(0turn);
-      -moz-transform: rotate(0turn);
-  }
-  100%{
-    transform: rotate(1turn);
-      -moz-transform: rotate(1turn);
-  }
-}
-@-webkit-keyframes spin{
-  0%{
-    transform: rotate(0turn);
-      -webkit-transform: rotate(0turn);
-  }
-  100%{
-    transform: rotate(1turn);
-      -webkit-transform: rotate(1turn);
-  }
-}
-@-o-keyframes spin{
-  0%{
-    transform: rotate(0turn);
-      -o-transform: rotate(0turn);
-  }
-  100%{
-    transform: rotate(1turn);
-      -o-transform: rotate(1turn);
-  }
 }

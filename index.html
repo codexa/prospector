@@ -20,6 +20,7 @@
   <script type="text/javascript" src="scripts/prospector.js"></script>
   
   <!-- Stylesheets -->
+  <link rel="stylesheet" type="text/css" href="style/progress_activity.css" />
   <link rel="stylesheet" type="text/css" href="style/lists.css" />
   <link rel="stylesheet" type="text/css" href="style/grids.css" />
   <link rel="stylesheet" type="text/css" href="style/headers.css" />
@@ -40,6 +41,7 @@
       </menu>
       <h1 class="center" id="current-directory-display">Prospector</h1>
     </header>
+    <progress max="100" value="0" class="pack-activity light hidden" id="progress" style="position: absolute; z-index: 1000;"></progress>
     <div role="edit" data-type="edit" id="edit-mode">
       <section>
         <header>

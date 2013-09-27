@@ -21,29 +21,29 @@
 
 @media (min-width: 1000px) {
   [data-type="grid"] ul {
-    column-count: 6;
-      -moz-column-count: 6;
+    column-count: 10;
+      -moz-column-count: 10;
   }
 }
 
 @media (max-width: 1000px) {
   [data-type="grid"] ul {
-    column-count: 5;
-      -moz-column-count: 5;
+    column-count: 8;
+      -moz-column-count: 8;
   }
 }
 
 @media (max-width: 800px) {
   [data-type="grid"] ul {
-    column-count: 4;
-      -moz-column-count: 4;
+    column-count: 6;
+      -moz-column-count: 6;
   }
 }
 
 @media (max-width: 600px) {
   [data-type="grid"] ul {
-    column-count: 3;
-      -moz-column-count: 3;
+    column-count: 4;
+      -moz-column-count: 4;
   }
 }
 
@@ -80,7 +80,7 @@
 
 /* Grid items */
 [data-type="grid"] li {
-  height: 15rem;
+  height: 12rem;
   width: 100% !important;
   box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -91,6 +91,10 @@
   color: #2c2c2c;
   margin: 0;
   display: inline-block;
+}
+
+[data-type="grid"] li:active {
+  background: rgba(0,0,0,.2);
 }
 
 
@@ -137,7 +141,7 @@
 }
 
 [data-type="grid"] li aside.file-item-icon {
-  height: 8rem;
+  height: 6rem;
   width: 100%;
   background-size: contain;
 }

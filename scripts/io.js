@@ -27,7 +27,7 @@ io.start = function (api, callback) {
       if (this.result != "available") {
         deviceAPI = null;
         storage = null;
-        alert("The SDCard on your device is shared, and thus not available.");
+        alert("The SDCard on your device is not available.");
         return;
       } else {
         callback(null, storage);  

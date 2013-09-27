@@ -133,6 +133,9 @@ function editMode() {
 ------------------------*/
 prospector.openDirectory = function (directory, animation) {
   var fileList;
+  
+  // Show activity bar
+  document.getElementById('progress').classList.remove('hidden');
 
   // Generate file list
   io.enumerate((directory), function(FILES) {
@@ -156,6 +159,9 @@ prospector.openDirectory = function (directory, animation) {
       var removedNode = fileArea.removeChild(fileArea.firstElementChild);
       fileArea.appendChild(removedNode);
     }
+    
+    // Hide activity bar
+    document.getElementById('progress').classList.add('hidden');
   });
   
   // Update displays
@@ -311,29 +317,31 @@ prospector.open = function (dir, name, type, mime) {
 
 /* Web Activities
 ------------------------*/ 
-navigator.mozSetMessageHandler('activity', function(activityRequest) {
-  var activity = activityRequest.source;
+if (navigator && navigator.mozSetMessageHandler) {
+  navigator.mozSetMessageHandler('activity', function(activityRequest) {
+    var activity = activityRequest.source;
   
-  // Wait for Prospector to be initialized
-  window.addEventListener('prospector.initialized', function () {
-    // Handle activities
-    if (activity.name === "open") {
-      // Open folder
-      prospector.openDirectory(activity.data.path);
-    } else if (activity.name === "pick") {
-      // Sieve
-      pickActivity = activityRequest;
-      multiple = activity.data.multiple;
-      if (activity.data.path) {
-        path = activity.data.path;
-        prospector.openDirectory(path);      
+    // Wait for Prospector to be initialized
+    window.addEventListener('prospector.initialized', function () {
+      // Handle activities
+      if (activity.name === "open") {
+        // Open folder
+        prospector.openDirectory(activity.data.path);
+      } else if (activity.name === "pick") {
+        // Sieve
+        pickActivity = activityRequest;
+        multiple = activity.data.multiple;
+        if (activity.data.path) {
+          path = activity.data.path;
+          prospector.openDirectory(path);      
+        }
       }
+    });
+    if (isInitialized == true && sieve != true) {
+      window.dispatchEvent(prospector.initialized);
     }
   });
-  if (isInitialized == true && sieve != true) {
-    window.dispatchEvent(prospector.initialized);
-  }
-});
+}
 
 
 /* Actions
