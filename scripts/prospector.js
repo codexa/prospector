@@ -23,7 +23,7 @@ var sieve, pickActivity, path, multiple, filter = [], sieveSelection = [];
 // Misc
 var deviceType;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
-var fileArea, fileBox, docList, currentDirectory, currentDirectoryDisplay;
+var fileArea, docList, currentDirectory, currentDirectoryDisplay;
 var editState, editSelection = [];
 var folderTree, isInitialized;
 prospector.initialized = new CustomEvent('prospector.initialized');
@@ -69,7 +69,6 @@ prospector.init = function () {
   
   // Select important elements
   fileArea = document.getElementById('file-area');
-  fileBox = document.getElementById('file-box');
   currentDirectory = document.getElementById('current-directory');
   if (sieve != true) {
     // Select Prospector-only elements
@@ -408,13 +407,6 @@ function processActions(eventAttribute, target) {
     } else if (calledFunction == 'back') {
       // Navigate to the previous region
       navBack();
-    } else if (calledFunction == 'close') {
-      // Clear file box
-      fileBox.innerHTML = '<span style="color: red;">Not supported...</span>';
-      fileBox.setAttribute('style', '');
-      fileBox.setAttribute('data-file-type', '');
-      document.getElementById('current-file-display').textContent = 'No file open';
-      navBack();
     } else if (calledFunction == 'edit-mode') {
       // Change the edit mode
       editMode();
@@ -518,7 +510,7 @@ function processActions(eventAttribute, target) {
         prospector.openDirectory(target.getAttribute(eventAttribute+'-directory') + target.getAttribute(eventAttribute+'-name'));
       } else {
         // Get URI     
-        var selection = (target.getAttribute(eventAttribute+'-directory') + target.getAttribute(eventAttribute+'-name') + target.getAttribute(eventAttribute+'-extension'));
+        var selection = [target.getAttribute(eventAttribute+'-directory'), target.getAttribute(eventAttribute+'-name'), target.getAttribute(eventAttribute+'-extension')];
 
         if (target.classList.contains('selected')) {
           // Deselect item
@@ -526,9 +518,12 @@ function processActions(eventAttribute, target) {
           
           // Remove from sieveSelection
           for (var i = 0; i < sieveSelection.length; i++) {
-            if (sieveSelection[i] == selection) {
+            if (sieveSelection[i][0] == selection[0] &&
+                sieveSelection[i][1] == selection[1] &&
+                sieveSelection[i][2] == selection[2]) {
 	          sieveSelection.splice(i, 1);
 	          break;
+	          return;
 	        }
           }
         } else {
@@ -545,7 +540,9 @@ function processActions(eventAttribute, target) {
           
           // Remove duplicates
           for (var i = 0; i < sieveSelection.length; i++) {
-            if (sieveSelection[i] == selection) {
+            if (sieveSelection[i][0] == selection[0] &&
+                sieveSelection[i][1] == selection[1] &&
+                sieveSelection[i][2] == selection[2]) {
 	          sieveSelection.splice(i, 1);
 	          break;
 	        }
@@ -564,15 +561,28 @@ function processActions(eventAttribute, target) {
       }
     } else if (sieve == true && calledFunction == 'sieve-done') {
       if (sieveSelection && sieveSelection != '') {
-        // Convert to string if multiple != true
-        if (multiple != true) {
-          sieveSelection = sieveSelection.toString();
-        }
-      
-        // Return selection
-        pickActivity.postResult(sieveSelection);
-        pickActivity = null; 
-        sieveSelection = [];
+        // Load blobs
+        var blobs = [];
+        for (var i = 0; i < sieveSelection.length; i++) {
+          io.load(sieveSelection[i][0], sieveSelection[i][1], sieveSelection[i][2], function (blob) {
+            // Return selection   
+            blobs.push(blob);
+            
+            // Finish 
+            if (i == sieveSelection.length) {
+              // If single selection, convert blobs array to string
+              if (blobs.length == 1) {
+                blobs = blobs[0];
+              }
+        
+              // Post result
+              pickActivity.postResult(blobs);
+              pickActivity = null; 
+              sieveSelection = [];
+              return;       
+            }
+          });
+        }        
       } else {
         // Close Sieve
         pickActivity.postResult('ActivityCanceled');

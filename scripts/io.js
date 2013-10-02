@@ -75,10 +75,6 @@ io.enumerate = function (directory, callback) {
     
       cursor.onerror = function() {
         if (cursor.error.name == 'TypeMismatchError') {
-          saveFile(directory, 'prospector','.temp','A temp file!  You should not be seeing this.  If you see it, please report it to <a href="https://github.com/codexa/prospector/issues/" target="_blank">us</a>.', false, function() {
-            deleteFile('prospector.temp');
-          });
-          updateFileLists();
           return;
         } else if (cursor.error.name == 'SecurityError') {
           alert('Please allow Prospector to access your SD card.');

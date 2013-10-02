@@ -20,6 +20,7 @@
   <script type="text/javascript" src="scripts/prospector.js"></script>
   
   <!-- Stylesheets -->
+  <link rel="stylesheet" type="text/css" href="style/progress_activity.css" />
   <link rel="stylesheet" type="text/css" href="style/lists.css" />
   <link rel="stylesheet" type="text/css" href="style/grids.css" />
   <link rel="stylesheet" type="text/css" href="style/headers.css" />
@@ -38,6 +39,7 @@
       </menu>
       <h1 class="center">Pick a File</h1>
     </header>
+    <progress max="100" value="0" class="pack-activity light hidden" id="progress" style="position: absolute; z-index: 1000;"></progress>
     <div role="main" class="header-only">
       <div id="file-area" class="file-area" data-type="list">
         <article></article>
