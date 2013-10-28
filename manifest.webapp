@@ -21,47 +21,47 @@
     },
     "ar": {
       "name": "Prospector",
-  	  "description": "A مستكشف الملفات لفايرفوكس OS"
+      "description": "A مستكشف الملفات لفايرفوكس OS"
     },
     "de": {
-  	  "name": "Prospector",
-  	  "description": "Ein Datei-Explorer für Firefox OS"
+      "name": "Prospector",
+      "description": "Ein Datei-Explorer für Firefox OS"
     },
     "el": {
-  	  "name": "Prospector",
-  	  "description": "Μια File Explorer για τον Firefox OS"
+      "name": "Prospector",
+      "description": "Μια File Explorer για τον Firefox OS"
     },
     "es": {
-  	  "name": "Prospector",
-  	  "description": "Un explorador de archivos para Firefox OS"
+      "name": "Prospector",
+      "description": "Un explorador de archivos para Firefox OS"
     },
     "fr": {
-  	  "name": "Prospector",
-  	  "description": "Un explorateur de fichiers pour Firefox OS"
+      "name": "Prospector",
+      "description": "Un explorateur de fichiers pour Firefox OS"
     },
     "it": {
-  	  "name": "Prospector",
-  	  "description": "Un File Explorer per Firefox OS"
+      "name": "Prospector",
+      "description": "Un File Explorer per Firefox OS"
     },
     "pt-BR": {
-  	  "name": "Prospector",
-  	  "description": "A File Explorer para o Firefox OS"
+      "name": "Prospector",
+      "description": "A File Explorer para o Firefox OS"
     },
     "ru": {
-  	  "name": "Prospector",
-  	  "description": "File Explorer для Firefox OS"
+      "name": "Prospector",
+      "description": "File Explorer для Firefox OS"
     },
     "tr": {
-  	  "name": "Prospector",
-  	  "description": "Firefox OS için bir Dosya Gezgini"
+      "name": "Prospector",
+      "description": "Firefox OS için bir Dosya Gezgini"
     },
     "zh-TW": {
-  	  "name": "Prospector",
-  	  "description": "一个文件浏览器火狐OS"
+      "name": "Prospector",
+      "description": "一个文件浏览器火狐OS"
     }
   },
   "permissions": {
-    "device-storage:sdcard":{
+    "device-storage:sdcard": {
       "access": "readwrite"
     }
   },
