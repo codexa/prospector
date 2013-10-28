@@ -58,9 +58,9 @@ io.enumerate = function (directory, callback) {
     var FILES = [];
     
     // Put directory in proper form
-    if (directory.length > 1 && directory[0] == '/') {
-      directory = directory.slice(1);
-    }
+//    if (directory.length > 1 && directory[0] == '/') {
+//      directory = directory.slice(1);
+//    }
     if (directory[directory.length - 1] != '/') {
       directory = (directory + '/');
     }
