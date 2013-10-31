@@ -562,26 +562,31 @@ function processActions(eventAttribute, target) {
     } else if (sieve == true && calledFunction == 'sieve-done') {
       if (sieveSelection && sieveSelection != '') {
         // Load blobs
-        var blobs = [];
+        var files = [];
         for (var i = 0; i < sieveSelection.length; i++) {
           io.load(sieveSelection[i][0], sieveSelection[i][1], sieveSelection[i][2], function (blob) {
-            // Return selection   
-            blobs.push(blob);
+			// Return selection
+			var file= {
+				blob : blob,
+				name : blob.name.substring(blob.name.lastIndexOf('/')+1)
+				}   
+            files.push(file);
             
             // Finish 
             if (i == sieveSelection.length) {
               // If single selection, convert blobs array to string
-              if (blobs.length == 1) {
-                blobs = blobs[0];
+              if (files.length == 1) {
+                files = files[0];
               }
         
               // Post result
-              pickActivity.postResult(blobs);
+              pickActivity.postResult(files);
               pickActivity = null; 
               sieveSelection = [];
               return;       
             }
           });
+
         }        
       } else {
         // Close Sieve
