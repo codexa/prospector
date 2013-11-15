@@ -296,7 +296,7 @@ prospector.open = function (dir, name, type, mime) {
 
         // Provide the data required by the filters of the activity
         data: {
-          path: (dir + name + type),
+          url: (dir + name + type),
           blob: result,
           type: mime
         }
