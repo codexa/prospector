@@ -113,6 +113,13 @@ prospector.init = function () {
 /* Edit Mode
 ------------------------*/
 function editMode() {
+  // Clear file list
+  var children = fileArea.childNodes;
+  for (var i = 0; i < children.length; i++) {
+    children[i].innerHTML = '';
+  }
+  
+  // Change mode
   if (editState == true) {
     editState = false;
     editSelection = [];
