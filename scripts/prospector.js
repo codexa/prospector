@@ -107,9 +107,20 @@ prospector.init = function () {
       }
     );
   }
-};
-
-
+  /*var pic,sdc,vid,mus,app;
+  var marr = [
+      pic = navigator.getDeviceStorage('pictures'),
+      sdc = navigator.getDeviceStorage('sdcard'),
+      vid = navigator.getDeviceStorage('videos'),
+      mus = navigator.getDeviceStorage('music'),
+      app = navigator.getDeviceStorage('apps')
+      ];
+  var compl;
+for (var i = 0; i < marr.length; i++) {
+  for (var b = 0; b < marr[i].length; b++) {
+    compl += marr[i][b];
+  }
+}*/
 /* Edit Mode
 ------------------------*/
 function editMode() {
@@ -603,4 +614,5 @@ function processActions(eventAttribute, target) {
       }
     }
   }
+}
 }
