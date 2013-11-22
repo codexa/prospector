@@ -60,6 +60,10 @@ function checkDevice() {
 /* Initalize
 ------------------------*/
 prospector.init = function () {
+  // Initialize Bugsense
+  var bugsense = new Bugsense( { appversion: '0.1', apiKey: '' } );
+  
+  // Detect sieve
   if (window.location.pathname == '/sieve.html') {
     sieve = true;
   }
@@ -116,11 +120,13 @@ prospector.init = function () {
       app = navigator.getDeviceStorage('apps')
       ];
   var compl;
-for (var i = 0; i < marr.length; i++) {
-  for (var b = 0; b < marr[i].length; b++) {
-    compl += marr[i][b];
-  }
-}*/
+  for (var i = 0; i < marr.length; i++) {
+    for (var b = 0; b < marr[i].length; b++) {
+      compl += marr[i][b];
+    }
+  }*/
+}
+
 /* Edit Mode
 ------------------------*/
 function editMode() {
@@ -614,5 +620,4 @@ function processActions(eventAttribute, target) {
       }
     }
   }
-}
 }
