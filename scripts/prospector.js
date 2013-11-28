@@ -103,6 +103,14 @@ prospector.init = function () {
     }
   });
   
+  // Find user's list style preference, and apply
+  var listStyle = prospector.settings.get('list.style');
+  if (listStyle == 'list') {
+    list();
+  } else {
+    grid();
+  }
+  
   if (sieve != true) {
     // Add event listeners
     fileArea.addEventListener(
@@ -367,6 +375,35 @@ if (navigator && navigator.mozSetMessageHandler) {
 }
 
 
+/* Lists
+------------------------*/ 
+function grid() {
+  // Change to grid display
+  if (document.getElementById("list-button") != null) {
+	var gridy = document.getElementById('list-button');
+	fileArea.setAttribute('data-type', 'grid');
+	gridy.setAttribute("data-click", "list");
+	gridy.childNodes[0].setAttribute("data-icon", "list");
+  
+    // Save preference
+    prospector.settings.save('list.style', 'grid');
+  }
+}
+
+function list() {
+  // Change to list display
+  if (document.getElementById("list-button") != null) {
+	var listy = document.getElementById('list-button');
+	fileArea.setAttribute('data-type', 'list');
+	listy.setAttribute("data-click", "grid");
+	listy.childNodes[0].setAttribute("data-icon", "grid");
+  
+    // Save preference
+    prospector.settings.save('list.style', 'list');
+  }
+}
+
+
 /* Actions
 ------------------------*/ 
 document.addEventListener('click', function(event) {
@@ -469,35 +506,9 @@ function processActions(eventAttribute, target) {
 	    editSelection.push(selection);
 	  }
     } else if (calledFunction == 'grid') {
-      // Change to grid display
-      if(document.getElementById("list-button") !== null){
-        var gridy = document.getElementById('list-button');
-        fileArea.setAttribute('data-type', 'grid');
-        gridy.setAttribute("id", "grid-button");
-        gridy.setAttribute("data-click", "grid");
-        gridy.childNodes[0].setAttribute("data-icon", "list");
-      } else {
-        var listy = document.getElementById('grid-button');
-        fileArea.setAttribute('data-type', 'list');
-        listy.setAttribute("id", "list-button");
-        listy.setAttribute("data-click", "list");
-        listy.childNodes[0].setAttribute("data-icon", "grid");
-      }
+      grid();
     } else if (calledFunction == 'list') {
-      // Change to list display
-      if(document.getElementById("grid-button") !== null){
-        var listy = document.getElementById('grid-button');
-        fileArea.setAttribute('data-type', 'list');
-        listy.setAttribute("id", "list-button");
-        listy.setAttribute("data-click", "list");
-        listy.childNodes[0].setAttribute("data-icon", "grid");
-      } else {
-        var gridy = document.getElementById('list-button');
-        fileArea.setAttribute('data-type', 'grid');
-        gridy.setAttribute("id", "grid-button");
-        gridy.setAttribute("data-click", "grid");
-        gridy.childNodes[0].setAttribute("data-icon", "list");
-      }
+      list();
     } else if (calledFunction == 'delete') {
       if (editSelection.length > 0) {
         // Confirm
