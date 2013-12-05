@@ -285,7 +285,8 @@ function fileItem(directory, name, type, mime) {
       if (icon) {
         output += '<aside class="file-item-icon" data-icon="'+icon+'"></aside>';
       }
-      output += '<input type="text" class="file-item-name" value="'+name+shownType+'" />'; 
+      output += '<p><span class="file-item-name">'+name+'</span>';
+      output += '<span class="file-item-extension">'+shownType+'</span></p>'; 
       output += '<p class="file-item-path">'+shownDirectory+name+shownType+'</p>';
       output += '</div>'; 
       output += '</a></li>';  
@@ -339,7 +340,7 @@ prospector.open = function (dir, name, type, mime) {
       };
 
       activity.onerror = function() {
-        console.log(this.error);
+        alert(this.error.name);
       };
     });
   }

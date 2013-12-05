@@ -254,9 +254,9 @@
 }
 
 [role="edit"][data-type="edit"] menu button {
-  width: calc((100% - 1rem) / 2);
-    width: -moz-calc((100% - 1rem) / 2);
-    width: -webkit-calc((100% - 1rem) / 2);
+    width: -moz-calc((100% - 1rem));
+    width: -webkit-calc((100% - 1rem));
+  width: calc((100% - 1rem));
 }
 
 [role="edit"][data-type="edit"] menu button.full {
