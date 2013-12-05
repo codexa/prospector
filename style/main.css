@@ -49,7 +49,7 @@ section > header:first-child h1.center {
   margin: 1rem;
 }
 
-.disabled {
+button.disabled {
   pointer-events: none;
   opacity: .3;
 }
@@ -81,52 +81,64 @@ form[role=dialog].current {
 }
 
 
-/* Lists */
-[data-type="list"], [data-type="edit"] {
-  margin: 0;
-  padding: 0;
-}
-
-[data-type="list"] h2,
-[data-type="edit"] h2 {
-  background: #CACACA;
-  padding: 5px 20px;
-  color: #2C2C2C;
-  margin: 0 0;
-  font-family: "Open Sans";
-  font-weight: normal;
-  font-size: 1.8rem;
-}
-
-[data-type="list"] li a,
-[data-type="edit"] li a,
-.noLink {
-  padding-left: 20px;
-  padding-right: 20px;
-  text-decoration: none;
-}
-
-[data-type="edit"] li {
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
-
 /* File List */
 [data-type="list"] li.file-list-item {
-  height: auto;
-  background: #eee;
+  height: 5.6rem;
+  background: #dfdfdf;
+  border-bottom: 2px solid #aeaeae;
+    -moz-transition: -moz-transform .2s, background-color .2s;
+  transition: transform .2s, background-color .2s;
+}
+
+[data-type="list"] li.file-list-item:not(.editMode):active {
+  background-color: rgba(0,0,0,.2);
+}
+
+[data-type="list"] li.file-list-item.editMode {
+    -moz-transform: translateX(10rem);
+  transform: translateX(10rem);
+}
+
+[data-type="list"] li.file-list-item .editDrawer {
+  display: inline-block;
+  height: 100%;
+  width: 10rem;
+  background: #aeaeae;
+  position: absolute;
+  right: 100%;
   border-bottom: 2px solid #aeaeae;
 }
 
-[data-type="list"] li.file-list-item a {
+[data-type="list"] li.file-list-item .editDrawer [data-icon] {
+  width: 5rem;
+  height: 100%;
+  display: inline-block;
+  background-size: 4rem;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+    -moz-transition: background-color .2s;
+  transition: background-color .2s;
+}
+
+[data-type="list"] li.file-list-item .editDrawer [data-icon]:active {
+  background-color: #ccc;
+}
+
+[data-type="list"] li.file-list-item div {
   padding: 0;
   margin: 0;
   height: auto;
+  width: 100%;
+  display: block;
 }
 
-[data-type="list"] li.file-list-item > a > p,
-[data-type="list"] li.file-list-item > a > div {
+[data-type="list"] li.file-list-item.editMode > div:not(.editDrawer) {
+  width: calc(100% - 5rem);
+}
+
+[data-type="list"] li.file-list-item > div > p,
+[data-type="list"] li.file-list-item > div > div {
   padding: .5rem 2rem;
 }
 
@@ -135,6 +147,33 @@ form[role=dialog].current {
   overflow: hidden;
 }
 
+[data-type="list"] li.file-list-item.editMode .file-item-info {
+  padding: .6rem .5rem;
+}
+
+[data-type="list"] li.file-list-item .file-item-edit {
+  width: calc(100% - 14.3rem);
+  display: none;
+  border: none;
+  text-align: left;
+    -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  background: #fff;
+  margin: .3rem 0;
+  padding: .5rem;
+  font-size: 2rem;
+}
+
+[data-type="list"] li.file-list-item.editMode .file-item-edit {
+  display: inline-block;
+}
+
+[data-type="list"] li.file-list-item.editMode .file-item-name,
+[data-type="list"] li.file-list-item.editMode .file-item-extension,
+[data-type="list"] li.file-list-item.editMode .file-item-path {
+  display: none;
+}
+    
 [data-type="list"] li.file-list-item .file-item-info .file-item-icon {
   height: 2rem;
   padding-top: 2.2rem;

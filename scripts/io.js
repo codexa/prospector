@@ -57,10 +57,6 @@ io.enumerate = function (directory, callback) {
     // List of files
     var FILES = [];
     
-    // Put directory in proper form
-//    if (directory.length > 1 && directory[0] == '/') {
-//      directory = directory.slice(1);
-//    }
     if (directory[directory.length - 1] != '/') {
       directory = (directory + '/');
     }
@@ -179,11 +175,26 @@ io.delete = function (name, callback) {
   }
 };
 
-io.rename = function (directory, name, type, newname, newtype) {
-  io.load(directory, name, type, function(result) {
-    var fullName = (directory + name + type);
-    io.save(directory, newname, newtype, result, function(){});
-    io.delete(fullName);
+io.rename = function (directory, name, type, mime, newname, newtype, callback) {
+  io.load(directory, name, type, function(result, error) {
+    if (!error) {
+      var fullName = (directory + name + type);
+      io.save(directory, newname, newtype, mime, result, function (error) {
+        if (!error) {
+          io.delete(fullName, function (error) {
+            if (!error) {
+              callback();
+            } else {
+              callback(error);
+            }
+          });      
+        } else {
+          callback(error);
+        }   
+      });
+    } else {
+      callback(error);
+    }
   });
 };
 
@@ -196,15 +207,32 @@ io.load = function (directory, filename, filetype, callback) {
     };
     
     req.onerror = function () {
-      if (this.error.name == "NotFoundError") {
-        // New file, leave user to edit and save it
-      }
-      else {
-        alert('Load unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
-      }
+      callback(this.error.name);
     };
   }
-}
+};
+
+io.save = function (directory, filename, filetype, mime, content, callback) {
+  if (directory && filename && filetype && mime && content) {
+    // Create blob
+    var contentBlob;
+    contentBlob = new Blob([content], { "type" : mime });
+
+    // Get path
+    var filePath = (directory + filename + filetype);
+    
+    // Save file
+    var req = storage.addNamed(contentBlob, filePath);
+    
+    req.onsuccess = function () {
+      callback();
+    };
+    
+    req.onerror = function () {
+      callback(error);
+    };
+  }
+};
 
 io.split = function (path) {
   var file = new Array();

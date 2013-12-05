@@ -115,47 +115,63 @@ prospector.init = function () {
     // Add event listeners
     fileArea.addEventListener(
       'contextmenu', function contextmenu(event) {
-        editMode();
+        event.preventDefault();
+        editMode(event.target);
       }
     );
   }
-  /*var pic,sdc,vid,mus,app;
-  var marr = [
-      pic = navigator.getDeviceStorage('pictures'),
-      sdc = navigator.getDeviceStorage('sdcard'),
-      vid = navigator.getDeviceStorage('videos'),
-      mus = navigator.getDeviceStorage('music'),
-      app = navigator.getDeviceStorage('apps')
-      ];
-  var compl;
-  for (var i = 0; i < marr.length; i++) {
-    for (var b = 0; b < marr[i].length; b++) {
-      compl += marr[i][b];
-    }
-  }*/
 }
 
 /* Edit Mode
 ------------------------*/
-function editMode() {
-  // Clear file list
-  var children = fileArea.childNodes;
-  for (var i = 0; i < children.length; i++) {
-    children[i].innerHTML = '';
-  }
-  
+function editMode(node) {  
   // Change mode
-  if (editState == true) {
+  if (editState == true) {    
+    if (node) {  
+      if (node.classList && node.classList.contains('file-list-item')) {
+        node.classList.remove('editMode');
+      } else {      
+        while (node.parentNode && node.parentNode.classList) {
+          node = node.parentNode;
+          if (node.classList.contains('file-list-item')) {
+            editMode(node);
+            return;
+          }
+        }
+      }
+    } else {  
+      // Leave edit mode
+      var files = document.getElementsByClassName('editMode');
+      while (files.length > 0) {
+        files[0].classList.remove('editMode');
+      }
+    }
+    
+    // Set edit state
     editState = false;
-    editSelection = [];
-    prospector.openDirectory(currentDirectory.textContent, 'none');
-    navBack();
-    document.querySelector('#welcome [role="main"]').classList.remove('edit-mode');
-  } else {
-    editState = true;
-    prospector.openDirectory(currentDirectory.textContent, 'none');
-    nav('edit-mode');
-    document.querySelector('#welcome [role="main"]').classList.add('edit-mode');
+  } else {    
+    if (node) {
+      if (node.classList && node.classList.contains('file-list-item')) {
+        node.classList.add('editMode');
+      } else {      
+        while (node.parentNode && node.parentNode.classList) {
+          node = node.parentNode;
+          if (node.classList.contains('file-list-item')) {
+            editMode(node);
+            return;
+          }
+        }
+      }
+    } else {      
+      // Enter edit mode
+      var files = document.getElementsByClassName('file-list-item');
+      for (var i = 0; i < files.length; i++) {
+        files[i].classList.add('editMode');
+      }
+    }
+    
+    // Set edit state
+    editState = true; 
   }
 }
 
@@ -223,20 +239,7 @@ prospector.openDirectory = function (directory, animation) {
 
 prospector.buildFileList = function (FILES, listElms, display) {  
   if (listElms && FILES) {
-    var output = '<ul>';  
-  
-    // Make sure list is the right type of list
-    for (var i = 0; i < listElms.length; i++) {
-      if (editState == true) {
-        if (listElms[i].getAttribute('data-edit') != 'true') {
-          listElms[i].setAttribute('data-edit', 'true');
-        }      
-      } else {
-        if (listElms[i].getAttribute('data-edit') != 'false') {
-          listElms[i].setAttribute('data-edit', 'false');
-        }
-      }
-    }
+    var output = '<ul>';
         
     // Listify files!
     if (FILES.length > 0) {
@@ -278,37 +281,28 @@ function fileItem(directory, name, type, mime) {
     }
     
     // Generate item
-    if (editState == true) {
-      output = '<li class="file-list-item" data-click="select" data-click-directory="'+directory+'" data-click-name="'+name+'" data-click-extension="'+type+'" data-click-mime="'+mime+'">';
+    if (sieve == true) {
+      output = '<li class="file-list-item" data-click="sieve-select" data-click-directory="'+directory+'" data-click-name="'+name+'" data-click-extension="'+type+'" data-click-mime="'+mime+'">';
       output += '<a href="#">';
       output += '<div class="file-item-info">';
-      if (icon) {
-        output += '<aside class="file-item-icon" data-icon="'+icon+'"></aside>';
-      }
-      output += '<input type="text" class="file-item-name" value="'+name+shownType+'" />'; 
-      output += '<p class="file-item-path">'+shownDirectory+name+shownType+'</p>';
-      output += '</div>'; 
-      output += '</a></li>';  
-    
     } else {
-      if (sieve == true) {
-        output = '<li class="file-list-item" data-click="sieve-select" data-click-directory="'+directory+'" data-click-name="'+name+'" data-click-extension="'+type+'" data-click-mime="'+mime+'">';
-        output += '<a href="#">';
-        output += '<div class="file-item-info">';
-      } else {
-        output = '<li class="file-list-item" data-click="open" data-click-directory="'+directory+'" data-click-name="'+name+'" data-click-extension="'+type+'" data-click-mime="'+mime+'">';
-        output += '<a href="#">';
-        output += '<div class="file-item-info">';
-      }
-      if (icon) {
-        output += '<aside class="file-item-icon" data-icon="'+icon+'"></aside>';
-      }
-      output += '<p><span class="file-item-name">'+name+'</span>';
-      output += '<span class="file-item-extension">'+shownType+'</span></p>'; 
-      output += '<p class="file-item-path">'+shownDirectory+name+shownType+'</p>';
-      output += '</div>'; 
-      output += '</a></li>';  
+      output = '<li class="file-list-item" data-click="open" data-click-directory="'+directory+'" data-click-name="'+name+'" data-click-extension="'+type+'" data-click-mime="'+mime+'">';
+      output += '<div class="editDrawer">'
+      output += '<span data-icon="delete" data-click="delete"></span>';
+      output += '<span data-icon="checkmark" data-click="rename"></span>';
+      output += '</div>';
+      output += '<div>';
+      output += '<div class="file-item-info">';
     }
+    if (icon) {
+      output += '<aside class="file-item-icon" data-icon="'+icon+'"></aside>';
+    }
+    output += '<input type="text" class="file-item-edit" value="'+name+'" />';
+    output += '<p><span class="file-item-name">'+name+'</span>';
+    output += '<span class="file-item-extension">'+shownType+'</span></p>'; 
+    output += '<p class="file-item-path">'+shownDirectory+name+shownType+'</p>';
+    output += '</div>'; 
+    output += '</div></li>';    
   }
   
   return output;
@@ -339,7 +333,7 @@ prospector.open = function (dir, name, type, mime) {
       };
 
       activity.onerror = function() {
-        console.log(this.error);
+        alert(this.error.name);
       };
     });
   }
@@ -448,6 +442,11 @@ function processActions(eventAttribute, target) {
     }
     var calledFunction = target.getAttribute(eventAttribute);
     if (calledFunction == 'open') {
+      // Stop on edit mode
+      if (target.classList.contains('editMode')) {
+        return;
+      }
+    
       // Special folder action
       if (target.getAttribute(eventAttribute+'-extension') == 'folder') {
         prospector.openDirectory(target.getAttribute(eventAttribute+'-directory') + target.getAttribute(eventAttribute+'-name'));
@@ -470,75 +469,77 @@ function processActions(eventAttribute, target) {
       navBack();
     } else if (calledFunction == 'edit-mode') {
       // Change the edit mode
-      editMode();
-    } else if (calledFunction == 'select') {
-	  // Get URI
-	  if (target.getAttribute(eventAttribute+'-extension') == 'folder') {
-	  	var selection = (target.getAttribute(eventAttribute+'-directory') + target.getAttribute(eventAttribute+'-name'));
-	  } else {
-	    var selection = (target.getAttribute(eventAttribute+'-directory') + target.getAttribute(eventAttribute+'-name') + target.getAttribute(eventAttribute+'-extension'));
-	  }
-	
-	  if (target.classList.contains('selected')) {
-	    // Deselect item
-	    target.classList.remove('selected');
-	  
-	    // Remove from selection
-	    for (var i = 0; i < editSelection.length; i++) {
-	   	  if (editSelection[i] == selection) {
-	  	    editSelection.splice(i, 1);
-		    break;
-		  }
-	    }
-	  } else {	
-	    // Select item   
-	    target.classList.add('selected');
-	  
-	    // Remove duplicates
-	    for (var i = 0; i < editSelection.length; i++) {
-		  if (editSelection[i] == selection) {
-		    editSelection.splice(i, 1);
-		    break;
-		  }
-	    }
-	
-	    // Add to selection
-	    editSelection.push(selection);
-	  }
+      editMode(target);
     } else if (calledFunction == 'grid') {
       grid();
     } else if (calledFunction == 'list') {
       list();
     } else if (calledFunction == 'delete') {
-      if (editSelection.length > 0) {
-        // Confirm
-        if (editSelection.length == 1) {
-          var confirmDeletion = confirm('Do you want to delete this file?');
+      var confirmDeletion = confirm('Do you want to delete this file?');
+      if (confirmDeletion == true) {
+        // Select file item
+        target = target.parentNode;
+        target = target.parentNode;
+        
+        // Get correct type
+        if (target.getAttribute(eventAttribute+'-extension') == 'folder') {
+          var type = '';
         } else {
-          var confirmDeletion = confirm('Do you want to delete these files?');      
+          var type = target.getAttribute(eventAttribute+'-extension');
         }
-        if (confirmDeletion == true) {
-          // Delete files
-          for (var i = 0; i < editSelection.length; i++) {
-            io.delete(editSelection[i], function (error) {
-              if (!error) {
-                // Refresh
-                prospector.openDirectory(currentDirectory.textContent, 'none');                
-              } else {
-                alert('There was an error in deleting '+editSelection[i]+'\n\nInfo:\n'+error);
-              }
-            });
+        
+        // Create file string
+        var file = (target.getAttribute(eventAttribute+'-directory') + target.getAttribute(eventAttribute+'-name') + type);
+
+        // Delete file
+        io.delete(file, function (error) {
+          if (!error) {
+            // Refresh
+            prospector.openDirectory(currentDirectory.textContent, 'none');                
+          } else {
+            alert('There was an error in deleting '+file+'\n\nInfo:\n'+error);
           }
-          
-          // Empty selection
-          editSelection = [];
-        } else {
-          // Cancel
-          return;
-        }        
+        });
       } else {
-        alert('No files are selected.');
-      }
+        // Cancel
+        return;
+      } 
+    } else if (calledFunction == 'rename') {
+      var confirmRename = confirm('Do you want to rename this file?');
+      if (confirmRename == true) {
+        // Select file item
+        target = target.parentNode;
+        target = target.parentNode;
+        
+        // Get correct type
+        if (target.getAttribute(eventAttribute+'-extension') == 'folder') {
+          var type = '';
+          alert('Renaming folders is not supported yet.');
+          return;
+        } else {
+          var type = target.getAttribute(eventAttribute+'-extension');
+        }
+        
+        // Get file info
+        var directory = target.getAttribute(eventAttribute+'-directory');
+        var name = target.getAttribute(eventAttribute+'-name');
+        var type = target.getAttribute(eventAttribute+'-extension');
+        var mime = target.getAttribute(eventAttribute+'-mime');
+        var newname = target.children[1].children[0].children[1].value;
+
+        // Delete file
+        io.rename(directory, name, type, mime, newname, type, function (error) {
+          if (!error) {
+            // Refresh
+            prospector.openDirectory(currentDirectory.textContent, 'none');              
+          } else {
+            alert('There was an error in renaming this file.\n\nInfo:\n'+error);
+          }
+        });
+      } else {
+        // Cancel
+        return;
+      } 
     } else if (sieve == true && calledFunction == 'sieve-select') {
       // Special folder action
       if (target.getAttribute(eventAttribute+'-extension') == 'folder') {

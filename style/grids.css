@@ -82,24 +82,62 @@
 [data-type="grid"] li {
   height: 12rem;
   width: 100% !important;
-  box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box; 
+  box-sizing: border-box;
   border-bottom: solid 1px #aeaeae; 
   border-right: solid 1px #aeaeae; 
   background: #dfdfdf;
   color: #2c2c2c;
   margin: 0;
-  display: inline-block;
 }
 
-[data-type="grid"] li:active {
+[data-type="grid"] li:not(.editMode):active {
   background: rgba(0,0,0,.2);
 }
 
 
 /* File grid items */
-[data-type="grid"] li.file-list-item a {
+[data-type="grid"] li.file-list-item {
+  position: relative;
+  overflow: hidden;
+}
+
+[data-type="grid"] li.file-list-item .editDrawer {
+  display: block;
+  height: 4rem;
+  width: 100%;
+  background: #aeaeae;
+  position: absolute;
+  bottom: 0;
+    -moz-transform: translateY(100%);
+  transform: translateY(100%);
+    -moz-transition: -moz-transform .2s;
+  transition: transform .2s;
+}
+
+[data-type="grid"] li.file-list-item.editMode .editDrawer {
+    -moz-transform: none;
+  transform: none;
+}
+
+[data-type="grid"] li.file-list-item .editDrawer [data-icon] {
+  width: 4rem;
+  height: 100%;
+  display: inline-block;
+  background-size: 3rem;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+    -moz-transition: background-color .2s;
+  transition: background-color .2s;
+}
+
+[data-type="grid"] li.file-list-item .editDrawer [data-icon]:active {
+  background-color: #ccc;
+}
+
+[data-type="grid"] li.file-list-item div {
   padding: 0;
   margin: 0;
   height: auto;
@@ -107,9 +145,38 @@
   color: black;
 }
 
-[data-type="grid"] li.file-list-item > a > p,
-[data-type="grid"] li.file-list-item > a > div {
+[data-type="grid"] li.file-list-item > div > p,
+[data-type="grid"] li.file-list-item > div > div {
   padding: 1rem 2rem;
+}
+
+[data-type="grid"] li.file-list-item.editMode > div > p,
+[data-type="grid"] li.file-list-item.editMode > div > div {
+  padding: 1rem 1rem;
+}
+
+[data-type="grid"] li.file-list-item .file-item-edit {
+  display: none;
+  width: 100%;
+  height: calc(100% - 4rem);
+  border: none;
+  text-align: center;
+    -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  background: #fff;
+  margin: 1rem 0;
+  padding: .5rem;
+  font-size: 2rem;
+}
+
+[data-type="grid"] li.file-list-item.editMode .file-item-edit {
+  display: block;
+}
+
+[data-type="grid"] li.file-list-item.editMode .file-item-name,
+[data-type="grid"] li.file-list-item.editMode .file-item-extension,
+[data-type="grid"] li.file-list-item.editMode .file-item-path {
+  display: none;
 }
 
 [data-type="grid"] li.file-list-item .file-item-name {
@@ -140,8 +207,14 @@
   display: none;
 }
 
-[data-type="grid"] li aside.file-item-icon {
+[data-type="grid"] li.file-list-item aside.file-item-icon {
   height: 5rem;
   width: 100%;
   background-size: contain;
+    -moz-transition: height .2s;
+  transition: height .2s;
+}
+
+[data-type="grid"] li.file-list-item.editMode aside.file-item-icon {
+  height: 1.5rem;
 }
