@@ -1,41 +1,64 @@
-/* UI Icons */
-[data-icon="back"] {
-  background-image: url(../img/misc/back.svg);
-  background-size: 1rem !important;
+/* Icons */
+@font-face {
+	font-family: 'Prospector';
+	src:url('fonts/Prospector.eot');
+	src:url('fonts/Prospector.eot?#iefix') format('embedded-opentype'),
+		url('fonts/Prospector.woff') format('woff'),
+		url('fonts/Prospector.ttf') format('truetype'),
+		url('fonts/Prospector.svg#Prospector') format('svg');
+	font-weight: normal;
+	font-style: normal;
 }
 
-[data-icon="close"] {
-  background-image: url(../img/misc/close.svg);
-  background-size: 1.8rem !important;
+[class^="icon-"], [class*=" icon-"] {
+	font-family: 'Prospector' !important;
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	
+	/* Enable Ligatures ================ */
+	-webkit-font-feature-settings: "liga";
+	-moz-font-feature-settings: "liga=1";
+	-moz-font-feature-settings: "liga";
+	-ms-font-feature-settings: "liga" 1;
+	-o-font-feature-settings: "liga";
+	font-feature-settings: "liga";
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
-[data-icon="grid"] {
-  background-image: url(../img/misc/grid.svg);
+.icon-remove:before {
+	content: "\e600";
 }
-
-[data-icon="list"] {
-  background-image: url(../img/misc/list.svg);
+.icon-checkmark:before {
+	content: "\e603";
 }
-
-[data-icon="checkmark"] {
-  background-image: url(../img/misc/checkmark.svg);
+.icon-grid:before {
+	content: "\e602";
 }
-
-
-/* File Icons */
-.file-item-icon {
-  width: 4rem;
-  background-size: 4rem;
-  background-repeat: no-repeat;
-  background-position: center;
-  padding-right: 5px;
-  pointer-events: none;
+.icon-list:before {
+	content: "\e604";
 }
-
-[data-icon="folder"] {
-  background-image: url(../img/extensions/folder.svg);
+.icon-folder:before {
+	content: "\e605";
 }
-
-[data-icon="file"] {
-  background-image: url(../img/extensions/file.svg);
+.icon-menu:before {
+	content: "\e601";
+}
+.icon-back:before {
+	content: "\e606";
+}
+.icon-close:before {
+	content: "\e607";
+}
+.icon-file:before {
+	content: "\e608";
+}
+.icon-add:before {
+	content: "\e609";
 }

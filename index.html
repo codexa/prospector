@@ -1,7 +1,7 @@
 <!--
 * Prospector
 * A web-based file browser
-* Copyright (C) Codexa Organization 2013.
+* Copyright (C) Codexa Organization 2013 - 2014.
 -->
 
 <!DOCTYPE html>
@@ -37,29 +37,23 @@
 
 </head>
 <body role="application">
-  <section role="region" id="welcome" class="current">
+  <section role="region" id="welcome" class="current region">
     <header>
-      <button data-click="previous" id="back-button" class="disabled"><span class="icon" data-icon="back">&lt;</span></button>
+      <button data-click="previous" id="back-button" class="disabled"><span class="icon icon-back"></span></button>
       <menu type="toolbar">
-       <button data-click="list" id="list-button"><span class="icon" data-icon="list">List</span></button>
+       <button data-click="list" id="list-button"><span class="icon icon-list"></span></button>
+       <button data-click="nav" data-click-location="create"><span class="icon icon-add"></span></button>
       </menu>
-      <h1 class="center" id="current-directory-display">Prospector</h1>
+      <form action="#">
+        <input type="text" placeholder="Find" required="required">
+        <button type="reset">Remove text</button>
+      </form>
+    </header>
+    <header class="directory-box">   
+      <h2 id="current-directory-display">/</h1>    
     </header>
     <progress max="100" value="0" class="pack-activity light hidden" id="progress" style="position: absolute; z-index: 1000;"></progress>
-    <div role="edit" data-type="edit" id="edit-mode">
-      <section>
-        <header>
-          <menu type="toolbar">
-            <button data-click="edit-mode">Done</button>
-          </menu>
-          <h1>Select files</h1>
-        </header>
-      </section>
-      <menu id="selectButtons">
-        <button data-click="delete" class="danger">Delete selected</button>
-      </menu>
-    </div>
-    <div role="main" class="header-only">
+    <div role="main" class="double-header">    
       <div id="file-area" class="file-area" data-type="grid">
         <article></article>
         <article></article>
@@ -68,5 +62,15 @@
     </div>
   </section>
   <hidden style="display: none;" id="current-directory"></hidden>
+  
+  <section role="dialog" id="create" class="region">
+    <header>
+      <button data-click="navBack"><span class="icon icon-close"></span></button>
+      <h1>Create</h1>
+    </header>
+    <div role="main" class="header-only">
+    </div>
+  </section>
+  <div class="background"></div>
 </body>
 </html>

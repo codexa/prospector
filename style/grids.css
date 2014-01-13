@@ -85,12 +85,14 @@
   box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box; 
-  border-bottom: solid 1px #aeaeae; 
-  border-right: solid 1px #aeaeae; 
-  background: #dfdfdf;
+  border-top: solid 1px #dfdfdf;
   color: #2c2c2c;
   margin: 0;
   display: inline-block;
+}
+
+[data-type="grid"] li ~ li {
+  border-left: solid 1px #dfdfdf;      
 }
 
 [data-type="grid"] li:active {
@@ -143,5 +145,6 @@
 [data-type="grid"] li aside.file-item-icon {
   height: 5rem;
   width: 100%;
-  background-size: contain;
+  font-size: 5rem;
+  color: #2c2c2c;
 }

@@ -1,18 +1,37 @@
-var regionHistory = new Array();
+/*
+* Regions
+* Navigation handler
+* Copyright (C) Codexa Organization 2013 - 2014.
+*/
+
+'use strict';
+
+
+/* Namespace Container
+------------------------*/ 
+var regions = {};
+
+
+/* Variables
+------------------------*/
+regions.history = new Array();
 var tempLoc = '';
 
-function nav(location) {
+
+/* Navigation
+------------------------*/
+regions.nav = function (location) {
   tempLoc = '';
   if (document.getElementById(location)) {
     tempLoc = location;
     if (document.querySelector('.current') && document.querySelector('.current').getAttribute('data-state') == 'drawer') {
-      sidebar(document.querySelector('[data-type=sidebar].active').id.replace(/sidebar_/, ''));
-      setTimeout(function() {nav2();}, 500);
+      regions.sidebar(document.querySelector('[data-type=sidebar].active').id.replace(/sidebar_/, ''));
+      setTimeout(function() { nav2(); }, 500);
     } else {
       nav2();
     }
   }
-}
+};
 
 function nav2() {   
   if (document.getElementById(tempLoc)) { 
@@ -27,26 +46,27 @@ function nav2() {
     if (document.querySelector('.parent') && document.getElementById(tempLoc).getAttribute('role') == 'region') {
       document.querySelector('.parent').classList.remove('parent');
     }
-    regionHistory.push(tempLoc);
+    regions.history.push(tempLoc);
     document.getElementById(tempLoc).classList.add('current');
     
-    /* Remove this section when porting to other projects */ 
+    /* Remove this section when porting to other projects */   
     /* End of customized section */
   }
 }
 
-function navBack() {
+regions.navBack = function () {
   document.querySelector('.current').classList.remove('parent');
   document.querySelector('.current').classList.remove('current');
-  regionHistory.pop();
+  regions.history.pop();
   
   // This is a weird way to do this, but I couldn't figure out a better one.
-  nav(regionHistory.pop());
+  regions.nav(regions.history.pop());
 }
 
-function sidebar(name) {
+regions.sidebar = function (name, state) {
   if (document.getElementById('sidebar_' + name) && document.querySelector('.current')) {
-    if (document.querySelector('.current').getAttribute('data-state') == 'drawer') {
+    if ((state && (state != 'open' || state == 'close')) || 
+    	(!state && document.querySelector('.current').getAttribute('data-state') == 'drawer')) {
       document.getElementById('sidebar_' + name).classList.remove('active');
       document.querySelector('.current').setAttribute('data-state', 'none');
     } else {
@@ -57,9 +77,9 @@ function sidebar(name) {
       }
     }
   }
-}
+};
 
-function tab(list, name) {
+regions.tab = function (list, name) {
   if (document.getElementById('tab-'+name)) {
     if (document.querySelector('.selected')) {
       document.querySelector('.selected').classList.remove('selected');
@@ -69,4 +89,4 @@ function tab(list, name) {
     /* Remove this section when porting to other projects */
     /* End of customized section */
   }
-}
+};

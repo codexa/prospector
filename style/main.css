@@ -1,6 +1,6 @@
 /*
 * Prospector Styles
-* Copyright (C) Codexa Organization 2013.
+* Copyright (C) Codexa Organization 2013 - 2014.
 */
 
 /* Basic CSS */
@@ -29,15 +29,20 @@ section > header:first-child h1.center {
 
 [role="main"].header-only {
   height: calc(100% - 5rem);
-    height: -moz-calc(100% - 5rem);
-    height: -webkit-calc(100% - 5rem);
+  overflow: scroll;
+}
+
+[role="main"].double-header {
+    height: -moz-calc(100% - 8.5rem);
+    height: -webkit-calc(100% - 8.5rem);
+  height: calc(100% - 8.5rem);
   overflow: scroll;
 }
 
 [role="main"].edit-mode {
-  height: calc(100% - 11.9rem);
     height: -moz-calc(100% - 11.9rem);
     height: -webkit-calc(100% - 11.9rem);
+  height: calc(100% - 11.9rem);
   overflow: scroll;
 }
 
@@ -65,11 +70,11 @@ form[role=dialog] {
 form[role=dialog].current {
   visibility: visible;
   opacity: 1;  
-  transform: none;
     -moz-transform: none;
     -webkit-transform: none;
     -o-transform: none;
     -ms-transform: none;
+  transform: none;
 }
 
 
@@ -108,7 +113,8 @@ form[role=dialog].current {
 [data-type="list"] li.file-list-item {
   height: auto;
   background: #eee;
-  border-bottom: 2px solid #aeaeae;
+  border: none;
+  border-top: 0.1rem solid #dfdfdf;
 }
 
 [data-type="list"] li.file-list-item a {
@@ -130,6 +136,9 @@ form[role=dialog].current {
 [data-type="list"] li.file-list-item .file-item-info .file-item-icon {
   height: 2rem;
   padding-top: 2.2rem;
+  font-size: 4rem;
+  color: #2c2c2c;
+  width: auto;
 }
 
 [data-type="list"] li.file-list-item .file-item-name {
@@ -178,7 +187,6 @@ form[role=dialog].current {
   opacity: 1;
   pointer-events: auto;
   z-index: 1;
-  background: #eee;
   transform: none;
     -moz-transform: none;
     -webkit-transform: none;

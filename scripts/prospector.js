@@ -1,6 +1,6 @@
 /*
  * Prospector
- * Copyright (C) Codexa Organization 2013.
+ * Copyright (C) Codexa Organization 2013 - 2014.
  * Licenced released under the GPLv3. 
  * See LICENSE in "resources/license/gpl.txt"
  * or at http://www.gnu.org/licenses/gpl-3.0.txt
@@ -61,7 +61,7 @@ function checkDevice() {
 ------------------------*/
 prospector.init = function () {
   // Initialize Bugsense
-  var bugsense = new Bugsense( { appversion: '0.1', apiKey: '' } );
+  /*var bugsense = new Bugsense( { appversion: '0.1', apiKey: '' } );*/
   
   // Detect sieve
   if (window.location.pathname == '/sieve.html') {
@@ -84,7 +84,7 @@ prospector.init = function () {
   io.start(null, function(error, storage) {
     if (!error) {
       // Navigate to the main screen
-      nav('welcome');
+      regions.nav('welcome');
     
       // Open root
       prospector.openDirectory('/', 'none');
@@ -99,7 +99,7 @@ prospector.init = function () {
       isInitialized = true;
     } else {
       // Navigate to the main screen
-      nav('welcome');
+      regions.nav('welcome');
     }
   });
   
@@ -113,11 +113,13 @@ prospector.init = function () {
   
   if (sieve != true) {
     // Add event listeners
-    fileArea.addEventListener(
-      'contextmenu', function contextmenu(event) {
-        editMode();
-      }
-    );
+    if (deviceType == 'mobile') {
+      fileArea.addEventListener(
+        'contextmenu', function contextmenu(event) {
+          editMode();
+        }
+      );
+    }
   }
   /*var pic,sdc,vid,mus,app;
   var marr = [
@@ -197,11 +199,7 @@ prospector.openDirectory = function (directory, animation) {
   
   // Update displays
   if (sieve != true) {
-    if (directory == '/') {
-      currentDirectoryDisplay.textContent = '/';
-    } else {
-      currentDirectoryDisplay.textContent = directory.substring((directory.lastIndexOf('/') + 1));
-    }
+    currentDirectoryDisplay.textContent = directory;
   }
   currentDirectory.textContent = directory;
   window.title = (directory + ' - Prospector');
@@ -302,7 +300,7 @@ function fileItem(directory, name, type, mime) {
         output += '<div class="file-item-info">';
       }
       if (icon) {
-        output += '<aside class="file-item-icon" data-icon="'+icon+'"></aside>';
+        output += '<aside class="file-item-icon icon icon-'+icon+'"></aside>';
       }
       output += '<p><span class="file-item-name">'+name+'</span>';
       output += '<span class="file-item-extension">'+shownType+'</span></p>'; 
@@ -384,7 +382,8 @@ function grid() {
 	var gridy = document.getElementById('list-button');
 	fileArea.setAttribute('data-type', 'grid');
 	gridy.setAttribute("data-click", "list");
-	gridy.childNodes[0].setAttribute("data-icon", "list");
+	gridy.childNodes[0].classList.remove("icon-grid");
+	gridy.childNodes[0].classList.add("icon-list");
   
     // Save preference
     prospector.settings.save('list.style', 'grid');
@@ -397,7 +396,8 @@ function list() {
 	var listy = document.getElementById('list-button');
 	fileArea.setAttribute('data-type', 'list');
 	listy.setAttribute("data-click", "grid");
-	listy.childNodes[0].setAttribute("data-icon", "grid");
+	listy.childNodes[0].classList.remove("icon-list");
+	listy.childNodes[0].classList.add("icon-grid");
   
     // Save preference
     prospector.settings.save('list.style', 'list');
@@ -448,7 +448,12 @@ function processActions(eventAttribute, target) {
       }
     }
     var calledFunction = target.getAttribute(eventAttribute);
-    if (calledFunction == 'open') {
+    if (calledFunction == 'nav') {
+      var navLocation = target.getAttribute(eventAttribute + '-location');
+      regions.nav(navLocation);
+    } else if (calledFunction == 'navBack') {
+      regions.navBack();
+    } else if (calledFunction == 'open') {
       // Special folder action
       if (target.getAttribute(eventAttribute+'-extension') == 'folder') {
         prospector.openDirectory(target.getAttribute(eventAttribute+'-directory') + target.getAttribute(eventAttribute+'-name'));
@@ -466,9 +471,6 @@ function processActions(eventAttribute, target) {
         // Open parent folder
         prospector.openDirectory(tempDir, 'reverse');
       }
-    } else if (calledFunction == 'back') {
-      // Navigate to the previous region
-      navBack();
     } else if (calledFunction == 'edit-mode') {
       // Change the edit mode
       editMode();

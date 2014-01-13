@@ -1,3 +1,12 @@
+/*
+* IO
+* File Operations Handler
+* Copyright (C) Codexa Organization 2013 - 2014.
+*/
+
+'use strict';
+
+
 /* Globals
 ------------------------*/
 // IO Namespace
